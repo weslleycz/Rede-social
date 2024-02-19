@@ -1,17 +1,17 @@
 version: "3.7"
 
 services:
-  # MongoDB service remains unchanged
-  mongodb:
-    image: prismagraphql/mongo-single-replica:4.4.3-bionic
-    container_name: mongodb
+  # Postgres
+  postgres:
+    container_name: pg_container
+    image: postgres
+    restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: prisma
-      INIT_WAIT_SEC: 3
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: postgres
     ports:
-      - "27017:27017"
-
+      - "5432:5432"
   # MariaDB service remains unchanged
   db:
     image: mariadb
@@ -47,26 +47,26 @@ services:
 
   # Nginx Proxy Manager service
   nginx-proxy-manager:
-    image: 'jc21/nginx-proxy-manager:latest'
+    image: "jc21/nginx-proxy-manager:latest"
     container_name: nginx-proxy-manager
     restart: unless-stopped
     ports:
-      - 80:80  # Proxy Manager UI
-      - '81:81'
-      - 443:443  # HTTPS for Proxy Manager UI and hosted domains
+      - 80:80 # Proxy Manager UI
+      - "81:81"
+      - 443:443 # HTTPS for Proxy Manager UI and hosted domains
     environment:
       - USE_HTTPS=true
-      - DEFAULT_SERVER_LETSENCRYPT=true  # Enable automatic Let's Encrypt SSL certificate provisioning
-      - DEFAULT_SERVER_MAX_CONNECTIONS=200  # Adjust according to your needs
+      - DEFAULT_SERVER_LETSENCRYPT=true # Enable automatic Let's Encrypt SSL certificate provisioning
+      - DEFAULT_SERVER_MAX_CONNECTIONS=200 # Adjust according to your needs
       - DB_USER=admin@example.com
       - DB_PASSWORD=changeme
       - DB_NAME=nginx_proxy_manager
-      - VIRTUAL_HOST_IP=your_server_ip_address  # Replace with your server's external IP address
-      - NGINX_PROXY_MANAGER_HOST_REDIRECT=https://your_domain.com  # Replace with your actual domain
+      - VIRTUAL_HOST_IP=your_server_ip_address # Replace with your server's external IP address
+      - NGINX_PROXY_MANAGER_HOST_REDIRECT=https://your_domain.com # Replace with your actual domain
     volumes:
-      - ./data:/data  # Persist Nginx Proxy Manager data
-      - ./letsencrypt:/etc/letsencrypt  # Persist Let's Encrypt certificates (optional)
-      - ./ssl:/etc/ssl  # Mount custom SSL certificates (optional)
+      - ./data:/data # Persist Nginx Proxy Manager data
+      - ./letsencrypt:/etc/letsencrypt # Persist Let's Encrypt certificates (optional)
+      - ./ssl:/etc/ssl # Mount custom SSL certificates (optional)
     networks:
       - nginx-network
 
@@ -78,6 +78,6 @@ volumes:
   db-data: {}
   nextcloud: {}
   # Additional volumes for Nginx Proxy Manager
-  data: {}  # Persist Nginx Proxy Manager data
-  letsencrypt: {}  # Persist Let's Encrypt certificates (optional)
-  ssl: {}  # Mount custom SSL certificates (optional)
+  data: {} # Persist Nginx Proxy Manager data
+  letsencrypt: {} # Persist Let's Encrypt certificates (optional)
+  ssl: {} # Mount custom SSL certificates (optional)

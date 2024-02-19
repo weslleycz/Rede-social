@@ -1,0 +1,14 @@
+@mixin default {
+  height: 100vh;
+}
+
+.dark {
+  @include default;
+  background-color: #0a0a0a;
+  color: #ffffff;
+}
+
+.light {
+  @include default;
+  background-color: #FBF6FF;
+}
