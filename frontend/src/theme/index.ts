@@ -19,3 +19,22 @@ export const theme = createTheme({
     },
   },
 });
+
+export const themeDark = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: "#1aff90",
+      contrastText: "#FFFFFF",
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          boxShadow: "none",
+        },
+      },
+    },
+  },
+});
