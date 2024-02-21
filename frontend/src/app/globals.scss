@@ -129,7 +129,9 @@
     border-spacing: 0;
   }
   
-  
+  body {
+    overflow: hidden;
+  }
   
   body {
     -webkit-font-smoothing: antialiased;

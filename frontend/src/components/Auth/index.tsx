@@ -46,7 +46,7 @@ export const Auth = () => {
               container
               rowSpacing={1}
               columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-              sx={{background:isDarkMode ? "#0a0a0a" : "#ffff", paddingTop:1}}
+              sx={{background: "#ffff", paddingTop:1}}
             >
               <Grid
                 sx={{
@@ -85,7 +85,7 @@ export const Auth = () => {
               </Grid>
             </Grid>
           ) : (
-            <Box height={"100vh"} bgcolor={isDarkMode ? "#0a0a0a" : "#ffff"}>
+            <Box height={"100vh"} bgcolor={"#ffff"}>
               <Box
                 alignContent={"center"}
                 bgcolor={"#1aff90"}

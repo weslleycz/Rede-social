@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { api } from "@/services/api";
 import {
   Box,
   Button,
@@ -8,6 +8,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { setCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { isEmail } from "validator";
 
 type Props = {
@@ -21,26 +24,9 @@ export const Login = ({ setIsRegister }: Props) => {
   const [errorPassword, setErrorPassword] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
 
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  useEffect(() => {
-    const darkModeMediaQuery = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    );
+  const router = useRouter();
 
-    const updateTheme = (event: any) => {
-      setIsDarkMode(event.matches);
-    };
-
-    darkModeMediaQuery.addListener(updateTheme);
-
-    updateTheme(darkModeMediaQuery);
-
-    return () => {
-      darkModeMediaQuery.removeListener(updateTheme);
-    };
-  }, []);
-
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (email === "") {
       setErrorEmail("Você precisa informar o seu e-mail");
@@ -54,22 +40,34 @@ export const Login = ({ setIsRegister }: Props) => {
       setErrorEmail("Este e-mail não é válido");
       return;
     }
-
     const expirationDate = new Date();
     expirationDate.setTime(expirationDate.getTime() + 72 * 60 * 60 * 1000);
-
-    if (rememberMe) {
-    } else {
+    try {
+      const res = await api.post("/user/login", {
+        email,
+        password,
+      });
+      if (rememberMe) {
+        setCookie("token", res.data.token, {
+          expires: expirationDate,
+          secure: false,
+          sameSite: "lax",
+        });
+        window.location.replace("/feed");
+      } else {
+        window.document.cookie = `token=${res.data.token}; session=true secure=false`;
+        window.location.replace("/feed");
+      }
+    } catch (error:any) {
+      setErrorEmail(error.response.data.message)
     }
   };
 
   return (
     <>
-      <Box height={"50%"} bgcolor={isDarkMode ? "#0a0a0a" : "#ffff"}>
+      <Box height={"50%"} bgcolor={"#ffff"}>
         <form onSubmit={handleSubmit}>
-          <FormLabel>
-            E-mail
-          </FormLabel>
+          <FormLabel>E-mail</FormLabel>
           <TextField
             variant="outlined"
             margin="normal"
@@ -85,9 +83,7 @@ export const Login = ({ setIsRegister }: Props) => {
             onChange={(e) => setEmail(e.target.value)}
           />
           {errorEmail && <Typography color="error">{errorEmail}</Typography>}
-          <FormLabel>
-            Senha
-          </FormLabel>
+          <FormLabel>Senha</FormLabel>
           <TextField
             variant="outlined"
             margin="normal"

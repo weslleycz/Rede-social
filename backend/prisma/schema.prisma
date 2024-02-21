@@ -11,10 +11,41 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  email    String @unique
+  id       String  @id @default(uuid())
+  email    String  @unique
   name     String
   password String
+  friends  User[]  @relation("UserFriends")
+  friendOf User[]  @relation("UserFriends")
+  Chat     Chat?   @relation(fields: [chatId], references: [id])
+  chatId   String?
 
   @@map("Users")
+}
+
+model Post {
+  id      String  @id @default(uuid())
+  content String?
+  urlImg  String?
+
+  @@map("Posts")
+}
+
+model Mensagem {
+  id     String   @id @default(uuid())
+  date   DateTime @default(now())
+  text   String
+  order  Int
+  Chat   Chat?    @relation(fields: [chatId], references: [id])
+  chatId String?
+
+  @@map("Mensagems")
+}
+
+model Chat {
+  id        String     @id @default(uuid())
+  mensagems Mensagem[]
+  users     User[]
+
+  @@map("Chats")
 }

@@ -1,5 +1,7 @@
 import { api } from "@/services/api";
 import { Box, Button, FormLabel, TextField, Typography } from "@mui/material";
+import { setCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { isEmail } from "validator";
 
@@ -16,6 +18,8 @@ export const Register = ({ setIsRegister }: Props) => {
   const [errorName, setErrorName] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
   const [errorConfirmPassword, setErrorConfirmPassword] = useState("");
+  const router = useRouter();
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (name === "") {
@@ -48,7 +52,14 @@ export const Register = ({ setIsRegister }: Props) => {
         name,
         password,
       });
-      console.log(res.data);
+      const expirationDate = new Date();
+      expirationDate.setTime(expirationDate.getTime() + 72 * 60 * 60 * 1000);
+      setCookie("token", res.data.token, {
+        expires: expirationDate,
+        secure: false,
+        sameSite: "lax",
+      });
+      window.location.replace("/feed");
     } catch (error: any) {
       setErrorName(error.response.data.message);
     }

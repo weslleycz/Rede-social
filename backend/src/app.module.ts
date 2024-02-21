@@ -6,10 +6,11 @@ import { UserController } from './controllers/user/user.controller';
 import { BcryptService } from './services/bcrypt.service';
 import { JWTService } from './services/jwt.service';
 import { NextcloudService } from './services/nextcloud.service';
+import { PostController } from './controllers/post/post.controller';
 
 @Module({
   imports: [],
-  controllers: [AppController, UserController],
+  controllers: [AppController, UserController, PostController],
   providers: [
     AppService,
     PrismaService,

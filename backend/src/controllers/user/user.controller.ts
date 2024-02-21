@@ -4,12 +4,16 @@ import {
   Body,
   HttpException,
   HttpStatus,
+  Get,
+  Param,
+  Res,
 } from '@nestjs/common';
-import { CreateUserDto } from './user.dto';
+import { CreateUserDto, LoginUserDto } from './user.dto';
 import { PrismaService } from '../../services/prisma.service';
 import { BcryptService } from 'src/services/bcrypt.service';
 import { JWTService } from 'src/services/jwt.service';
 import { NextcloudService } from 'src/services/nextcloud.service';
+import { Response } from 'express';
 
 @Controller('user')
 export class UserController {
@@ -33,12 +37,66 @@ export class UserController {
       });
       await this.nextcloudService.createFolder(user.id);
       const token = this.jwtService.login(user.id);
-      return { token };
+      return { token, id: user.id };
     } catch (error) {
       throw new HttpException(
         'Não foi possível cadastrar o usuário',
         HttpStatus.BAD_REQUEST,
       );
     }
+  }
+
+  @Post('/login')
+  async login(@Body() { email, password }: LoginUserDto) {
+    try {
+      const user = await this.prismaService.user.findFirst({
+        where: { email },
+      });
+      if (!user) {
+        throw new HttpException('Usuário ou senha inválidos', 401);
+      }
+      const isPasswordValid = await this.bcryptService.comparePasswords(
+        password,
+        user.password,
+      );
+      if (!isPasswordValid) {
+        throw new HttpException('Usuário ou senha inválidos', 401);
+      }
+      const token = this.jwtService.login(user.id);
+      return { token, id: user.id };
+    } catch (error) {
+      throw new HttpException('Usuário ou senha inválidos', 401);
+    }
+  }
+
+  @Get('/avatar/:id')
+  async getAvatar(@Param('id') id: string, @Res() res: Response) {
+    try {
+      const avatar = await this.nextcloudService.getFile({
+        fileBaseName: 'avatar.jpg',
+        folderName: id,
+      });
+      res.setHeader(
+        'Content-Disposition',
+        `attachment; filename=${id}-avatar.jpg`,
+      );
+      res.setHeader('Content-Type', 'image/jpeg');
+      res.send(avatar);
+    } catch (error) {
+      throw new HttpException('Avatar não encontrado', 400);
+    }
+  }
+
+  @Post('/upload/:id')
+  async upload(@Body() data: any, @Param('id') id: string) {
+    if (typeof data?.data !== 'string') {
+      throw new Error('Os dados devem ser uma string base64 válida');
+    }
+    const file = Buffer.from(data?.data, 'base64');
+    return await this.nextcloudService.upload({
+      data: file,
+      fileBaseName: 'avatar.jpg',
+      folderName: id,
+    });
   }
 }

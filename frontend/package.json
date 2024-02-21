@@ -12,14 +12,18 @@
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.10",
     "@mui/material": "^5.15.10",
     "@mui/material-nextjs": "^5.15.9",
     "axios": "^1.6.7",
+    "cookies-next": "^4.1.1",
     "next": "14.1.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-jwt": "^1.2.0",
     "sass": "^1.71.0",
     "scss": "^0.2.4",
+    "swr": "^2.2.5",
     "validator": "^13.11.0"
   },
   "devDependencies": {
