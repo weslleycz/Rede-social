@@ -1,4 +1,5 @@
 import { UploadImg } from "@/components/UploadImg"; // Corrigindo o nome do componente
+import { api } from "@/services/api";
 import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
 import { Box, Button, Grid, IconButton, TextField } from "@mui/material";
 import { useState } from "react";
@@ -24,8 +25,23 @@ export const PostingBox = () => {
     }
   };
 
-  const handlePostSubmit = () => {
-    console.log(postContent);
+  const handlePostSubmit = async () => {
+    if (postContent === "" && imageBase64 === "") {
+      return;
+    }
+    try {
+      const res = await api.post("/post", {
+        img: imageBase64,
+        text: postContent,
+      });
+      setImageBase64("");
+      setPostContent("");
+      setImageName("");
+    } catch (error: any) {
+      console.log(error.response.status);
+      if (error.response.status === 401) {
+      }
+    }
   };
 
   const handleCloseImg = () => {
@@ -46,33 +62,27 @@ export const PostingBox = () => {
         <Box p={2}>
           <TextField
             multiline
-            rows={2.5}
+            rows={1}
             fullWidth
-            variant="outlined"
+            variant="standard"
             placeholder="Digite aqui..."
             value={postContent}
             onChange={(e) => setPostContent(e.target.value)}
             InputProps={{
-              endAdornment: (
-                <>
-                  <label htmlFor="image-upload">
-                    <IconButton color="primary" component="span">
-                      <PhotoLibraryIcon />
-                    </IconButton>
-                  </label>
-                  <input
-                    id="image-upload"
-                    type="file"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    onChange={handleImageUpload}
-                  />
-                </>
-              ),
+              disableUnderline: true,
               sx: {
                 background: "#ffffff",
                 "& .MuiOutlinedInput-root": {
                   border: "none",
+                },
+                "& .MuiInput-underline:before": {
+                  borderBottom: "none", // Remove a borda antes de o campo de texto ser focado
+                },
+                "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
+                  borderBottom: "none", // Remove a borda ao passar o mouse sobre o campo de texto
+                },
+                "& .MuiInput-underline:after": {
+                  borderBottom: "none", // Remove a borda após o campo de texto ser focado
                 },
               },
             }}
@@ -86,10 +96,29 @@ export const PostingBox = () => {
                     name={imageName}
                     url={imageBase64}
                   />
-                ) : null}
+                ) : (
+                  <>
+                    <label htmlFor="image-upload">
+                      <IconButton color="primary" component="span">
+                        <PhotoLibraryIcon />
+                      </IconButton>
+                    </label>
+                    <input
+                      id="image-upload"
+                      type="file"
+                      accept="image/*"
+                      style={{ display: "none" }}
+                      onChange={handleImageUpload}
+                    />
+                  </>
+                )}
               </Grid>
               <Grid display={"flex"} justifyContent={"end"} item xs={4}>
-                <Button onClick={() => handlePostSubmit()} variant="contained">
+                <Button
+                  size="small"
+                  onClick={() => handlePostSubmit()}
+                  variant="contained"
+                >
                   Publicar
                 </Button>
               </Grid>

@@ -13,9 +13,12 @@ export const config = {
 
 export async function middleware(req: NextRequest, res: NextApiResponse) {
   const token = req.cookies.get("token") as unknown as any;
-  console.log();
-  
   if (token) {
+    const url = req.nextUrl.clone();
+    if(url.pathname === "/") {
+      url.pathname = "/feed";
+      return NextResponse.rewrite(url, { status: 307 });
+    }
     return NextResponse.next();
   } else {
     const url = req.nextUrl.clone();

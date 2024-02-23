@@ -2,40 +2,44 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["multiSchema"]
-  schemas  = ["base", "transactional"]
+  schemas         = ["base", "transactional"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas = ["base", "chatCofre"]
+  schemas  = ["base", "chatCofre"]
 }
 
 model User {
-  id       String  @id @default(uuid())
-  email    String  @unique
+  id       String    @id @default(uuid())
+  email    String    @unique
   name     String
   password String
-  friends  User[]  @relation("UserFriends")
-  friendOf User[]  @relation("UserFriends")
-  Chat     Chat?   @relation(fields: [chatId], references: [id])
+  friends  User[]    @relation("UserFriends")
+  friendOf User[]    @relation("UserFriends")
+  Chat     Chat?     @relation(fields: [chatId], references: [id])
   chatId   String?
+  Comment  Comment[]
+  Post     Post[]
 
   @@map("Users")
-
-   @@schema("base")
+  @@schema("base")
 }
 
 model Post {
-  id      String  @id @default(uuid())
-  content String?
-  urlImg  String?
+  id       String    @id @default(uuid())
+  content  String?
+  urlImg   String?
+  links    String[]
+  comments Comment[]
+  user     User      @relation(fields: [userId], references: [id])
+  userId   String
 
   @@map("Posts")
-
-   @@schema("base")
+  @@schema("base")
 }
 
 model Mensagem {
@@ -47,7 +51,6 @@ model Mensagem {
   chatId String?
 
   @@map("Mensagems")
-
   @@schema("chatCofre")
 }
 
@@ -57,6 +60,17 @@ model Chat {
   users     User[]
 
   @@map("Chats")
-
   @@schema("chatCofre")
+}
+
+model Comment {
+  id     String  @id @default(uuid())
+  text   String
+  Post   Post?   @relation(fields: [postId], references: [id])
+  postId String?
+  user   User    @relation(fields: [userId], references: [id])
+  userId String
+
+  @@map("Comments")
+  @@schema("base")
 }

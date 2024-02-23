@@ -3,6 +3,7 @@ import { sign, verify, decode, Secret } from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
 import { RedisService } from './redis.service';
 
+
 dotenv.config();
 
 @Injectable()
@@ -29,8 +30,8 @@ export class JWTService {
     }
   }
 
-  public decode(token: string) {
-    const tokenJwt = token.substring(7);
-    return decode(tokenJwt);
+  public decodeJwt(token: string) {
+    console.log(token);
+    return decode(token);
   }
 }

@@ -1,9 +1,10 @@
 "use client";
 
 import { Header } from "@/components/Header";
+import { Menu } from "@/components/Menu";
+import { Post } from "@/components/Post";
 import { PostingBox } from "@/components/PostingBox";
-import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
-import { Box, Container, Grid, Paper } from "@mui/material";
+import { Box, Container, Grid,  Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 
 const Feed = () => {
@@ -16,16 +17,7 @@ const Feed = () => {
     return () => clearTimeout(loadingTimeout);
   }, []);
 
-  const items = [
-    "Item 1",
-    "Item 2",
-    "Item 3",
-    "Item 4",
-    "Item 5",
-    "Item 6",
-    "Item 7",
-    "Item 8",
-  ];
+  const items = ["Item 1", "Item 2"];
 
   return (
     <>
@@ -36,15 +28,15 @@ const Feed = () => {
             <Grid item xs>
               <Box
                 sx={{
-                  height: "85vh",
+                  height: "70vh",
                   borderRadius: 0,
                   background: "#ffffff",
                   display: "flex",
-                  justifyContent: "center",
                   position: "sticky",
                   top: 0,
                 }}
               >
+                <Menu />
               </Box>
             </Grid>
 
@@ -74,17 +66,9 @@ const Feed = () => {
                   >
                     <Box marginBottom={14}>
                       {items.map((item, i) => (
-                        <Paper
-                          key={i}
-                          sx={{
-                            background: "#ffffff",
-                            padding: 2,
-                            margin: "10px 0",
-                          }}
-                          elevation={0}
-                        >
-                          {item}
-                        </Paper>
+                        <div key={i}>
+                          <Post />
+                        </div>
                       ))}
                     </Box>
                   </Box>
@@ -93,7 +77,7 @@ const Feed = () => {
             </Grid>
 
             <Grid item xs>
-              <Box
+              {/* <Box
                 sx={{
                   height: "85vh",
                   borderRadius: 0,
@@ -104,7 +88,7 @@ const Feed = () => {
                   position: "sticky",
                   top: 0,
                 }}
-              ></Box>
+              ></Box> */}
             </Grid>
           </Grid>
         )}
