@@ -3,11 +3,14 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+  schemas  = ["base", "transactional"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas = ["base", "chatCofre"]
 }
 
 model User {
@@ -21,6 +24,8 @@ model User {
   chatId   String?
 
   @@map("Users")
+
+   @@schema("base")
 }
 
 model Post {
@@ -29,6 +34,8 @@ model Post {
   urlImg  String?
 
   @@map("Posts")
+
+   @@schema("base")
 }
 
 model Mensagem {
@@ -40,6 +47,8 @@ model Mensagem {
   chatId String?
 
   @@map("Mensagems")
+
+  @@schema("chatCofre")
 }
 
 model Chat {
@@ -48,4 +57,6 @@ model Chat {
   users     User[]
 
   @@map("Chats")
+
+  @@schema("chatCofre")
 }

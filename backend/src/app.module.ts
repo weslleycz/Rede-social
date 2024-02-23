@@ -7,6 +7,8 @@ import { BcryptService } from './services/bcrypt.service';
 import { JWTService } from './services/jwt.service';
 import { NextcloudService } from './services/nextcloud.service';
 import { PostController } from './controllers/post/post.controller';
+import { RedisService } from './services/redis.service';
+import { EmailService } from './services/nodemailer.service';
 
 @Module({
   imports: [],
@@ -17,6 +19,8 @@ import { PostController } from './controllers/post/post.controller';
     BcryptService,
     JWTService,
     NextcloudService,
+    RedisService,
+    EmailService,
   ],
 })
 export class AppModule {}

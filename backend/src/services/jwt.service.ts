@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sign, verify, decode, Secret } from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
+import { RedisService } from './redis.service';
 
 dotenv.config();
 
@@ -8,13 +9,15 @@ dotenv.config();
 export class JWTService {
   private secretKey: Secret;
 
-  constructor() {
+  constructor(private readonly redisService: RedisService) {
     this.secretKey = process.env.Security_JWT;
   }
 
-  public login(id: string): string {
+  public async login(id: string): Promise<string> {
     const payload = { data: id };
-    return sign(payload, this.secretKey, { expiresIn: '72h' });
+    const token = sign(payload, this.secretKey, { expiresIn: '72h' });
+    await this.redisService.setValue(token, id, 259200);
+    return token;
   }
 
   public verify(token: string): boolean {

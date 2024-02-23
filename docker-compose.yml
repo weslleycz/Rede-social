@@ -1,9 +1,8 @@
 version: "3.7"
 
 services:
-  # Postgres
   postgres:
-    container_name: pg_container
+    container_name: postgres_container
     image: postgres
     restart: always
     environment:
@@ -12,7 +11,9 @@ services:
       POSTGRES_DB: postgres
     ports:
       - "5432:5432"
-  # MariaDB service remains unchanged
+    networks:
+      - mailcow-network
+
   db:
     image: mariadb
     container_name: mariadb
@@ -24,15 +25,17 @@ services:
       MYSQL_PASSWORD: example
     volumes:
       - db-data:/var/lib/mysql
+    networks:
+      - mailcow-network
 
-  # Redis service remains unchanged
   redis:
     image: redis
     container_name: redis
     ports:
       - "6379:6379"
+    networks:
+      - mailcow-network
 
-  # Nextcloud service remains unchanged
   nextcloud:
     image: nextcloud
     container_name: nextcloud
@@ -44,40 +47,76 @@ services:
       - redis
     volumes:
       - nextcloud:/var/www/html
+    networks:
+      - mailcow-network
 
-  # Nginx Proxy Manager service
   nginx-proxy-manager:
     image: "jc21/nginx-proxy-manager:latest"
     container_name: nginx-proxy-manager
     restart: unless-stopped
     ports:
-      - 80:80 # Proxy Manager UI
+      - 80:80
       - "81:81"
-      - 443:443 # HTTPS for Proxy Manager UI and hosted domains
+      - 443:443
     environment:
-      - USE_HTTPS=true
-      - DEFAULT_SERVER_LETSENCRYPT=true # Enable automatic Let's Encrypt SSL certificate provisioning
-      - DEFAULT_SERVER_MAX_CONNECTIONS=200 # Adjust according to your needs
+      - DEFAULT_SERVER_LETSENCRYPT=true
+      - DEFAULT_SERVER_MAX_CONNECTIONS=200
       - DB_USER=admin@example.com
       - DB_PASSWORD=changeme
       - DB_NAME=nginx_proxy_manager
-      - VIRTUAL_HOST_IP=your_server_ip_address # Replace with your server's external IP address
-      - NGINX_PROXY_MANAGER_HOST_REDIRECT=https://your_domain.com # Replace with your actual domain
+      - USE_HTTPS=false
     volumes:
-      - ./data:/data # Persist Nginx Proxy Manager data
-      - ./letsencrypt:/etc/letsencrypt # Persist Let's Encrypt certificates (optional)
-      - ./ssl:/etc/ssl # Mount custom SSL certificates (optional)
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+      - ./ssl:/etc/ssl
     networks:
-      - nginx-network
+      - mailcow-network
+
+  # mailserver:
+  #   image: ghcr.io/docker-mailserver/docker-mailserver:latest
+  #   container_name: mailserver
+  #   # Provide the FQDN of your mail server here (Your DNS MX record should point to this value)
+  #   hostname: mail.elcolie.com
+  #   # env_file: mailserver.env
+  #   # More information about the mail-server ports:
+  #   # https://docker-mailserver.github.io/docker-mailserver/latest/config/security/understanding-the-ports/
+  #   # To avoid conflicts with yaml base-60 float, DO NOT remove the quotation marks.
+  #   ports:
+  #     - "25:25"    # SMTP  (explicit TLS => STARTTLS)
+  #     - "143:143"  # IMAP4 (explicit TLS => STARTTLS)
+  #     - "465:465"  # ESMTP (implicit TLS)
+  #     - "587:587"  # ESMTP (explicit TLS => STARTTLS)
+  #     - "993:993"  # IMAP4 (implicit TLS)
+  #   volumes:
+  #     - ./docker-data/certbot/certs/:/etc/letsencrypt
+  #     - ./docker-data/dms/mail-data/:/var/mail/
+  #     - ./docker-data/dms/mail-state/:/var/mail-state/
+  #     - ./docker-data/dms/mail-logs/:/var/log/mail/
+  #     - ./docker-data/dms/config/:/tmp/docker-mailserver/
+  #     - /etc/localtime:/etc/localtime:ro
+  #   restart: always
+  #   stop_grace_period: 1m
+  #   # Uncomment if using `ENABLE_FAIL2BAN=1`:
+  #   # cap_add:
+  #   #   - NET_ADMIN
+  #   healthcheck:
+  #     test: "ss --listening --tcp | grep -P 'LISTEN.+:smtp' || exit 1"
+  #     timeout: 3s
+  #     retries: 0
 
 networks:
-  nginx-network:
+  mailcow-network:
     driver: bridge
 
 volumes:
   db-data: {}
   nextcloud: {}
-  # Additional volumes for Nginx Proxy Manager
-  data: {} # Persist Nginx Proxy Manager data
-  letsencrypt: {} # Persist Let's Encrypt certificates (optional)
-  ssl: {} # Mount custom SSL certificates (optional)
+  data: {}
+  letsencrypt: {}
+  ssl: {}
+  mail-data:
+  mail-state:
+  mail-logs:
+  mail-config:
+  roundcube-data:
+  roundcube-config:

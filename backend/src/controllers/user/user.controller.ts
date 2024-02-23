@@ -1,19 +1,19 @@
 import {
-  Controller,
-  Post,
   Body,
+  Controller,
+  Get,
   HttpException,
   HttpStatus,
-  Get,
   Param,
+  Post,
   Res,
 } from '@nestjs/common';
-import { CreateUserDto, LoginUserDto } from './user.dto';
-import { PrismaService } from '../../services/prisma.service';
+import { Response } from 'express';
 import { BcryptService } from 'src/services/bcrypt.service';
 import { JWTService } from 'src/services/jwt.service';
 import { NextcloudService } from 'src/services/nextcloud.service';
-import { Response } from 'express';
+import { PrismaService } from '../../services/prisma.service';
+import { CreateUserDto, LoginUserDto } from './user.dto';
 
 @Controller('user')
 export class UserController {
@@ -36,7 +36,7 @@ export class UserController {
         },
       });
       await this.nextcloudService.createFolder(user.id);
-      const token = this.jwtService.login(user.id);
+      const token = await this.jwtService.login(user.id);
       return { token, id: user.id };
     } catch (error) {
       throw new HttpException(
@@ -62,7 +62,7 @@ export class UserController {
       if (!isPasswordValid) {
         throw new HttpException('Usuário ou senha inválidos', 401);
       }
-      const token = this.jwtService.login(user.id);
+      const token = await this.jwtService.login(user.id);
       return { token, id: user.id };
     } catch (error) {
       throw new HttpException('Usuário ou senha inválidos', 401);

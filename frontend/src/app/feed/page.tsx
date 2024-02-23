@@ -1,5 +1,6 @@
 "use client";
 
+import { Header } from "@/components/Header";
 import { PostingBox } from "@/components/PostingBox";
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import { Box, Container, Grid, Paper } from "@mui/material";
@@ -29,6 +30,7 @@ const Feed = () => {
   return (
     <>
       <Box style={{ background: "#EBEBEB", padding: 2 }}>
+        <Header />
         {isLoading ? null : (
           <Grid container>
             <Grid item xs>
@@ -43,7 +45,6 @@ const Feed = () => {
                   top: 0,
                 }}
               >
-                <SportsEsportsIcon color="primary" sx={{ fontSize: 60 }} />
               </Box>
             </Grid>
 
@@ -71,7 +72,7 @@ const Feed = () => {
                       },
                     }}
                   >
-                    <Box marginBottom={10}>
+                    <Box marginBottom={14}>
                       {items.map((item, i) => (
                         <Paper
                           key={i}
@@ -94,7 +95,7 @@ const Feed = () => {
             <Grid item xs>
               <Box
                 sx={{
-                  height: "100vh",
+                  height: "85vh",
                   borderRadius: 0,
                   background: "#ffff",
                   display: "flex",
