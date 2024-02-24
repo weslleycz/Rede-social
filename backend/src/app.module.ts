@@ -12,6 +12,7 @@ import { EmailService } from './services/nodemailer.service';
 import { RoleInterceptor } from './middlewares/roles.middleware';
 import { HttpExceptionFilter } from './common/exceptions/http-exception.filter';
 import { APP_FILTER } from '@nestjs/core';
+import { FeedGateway } from './websockets/feed/feed.gateway';
 
 @Module({
   imports: [],
@@ -30,6 +31,7 @@ import { APP_FILTER } from '@nestjs/core';
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
     },
+    FeedGateway,
   ],
 })
 export class AppModule {}

@@ -1,3 +1,0 @@
-
-docker exec -ti mailserver setup email add user@example.com
-teste

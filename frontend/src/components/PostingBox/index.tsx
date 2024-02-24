@@ -3,12 +3,18 @@ import { api } from "@/services/api";
 import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
 import { Box, Button, Grid, IconButton, TextField } from "@mui/material";
 import { useState } from "react";
+import { QueryClient } from "react-query";
+import { LoadingButton } from "@mui/lab";
 
 export const PostingBox = () => {
   const [postContent, setPostContent] = useState("");
 
   const [imageBase64, setImageBase64] = useState("");
   const [imageName, setImageName] = useState("");
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const queryClient = new QueryClient();
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -30,6 +36,7 @@ export const PostingBox = () => {
       return;
     }
     try {
+      setIsLoading(true)
       const res = await api.post("/post", {
         img: imageBase64,
         text: postContent,
@@ -37,10 +44,11 @@ export const PostingBox = () => {
       setImageBase64("");
       setPostContent("");
       setImageName("");
+      queryClient.invalidateQueries("getFeed");
+      setIsLoading(false)
     } catch (error: any) {
       console.log(error.response.status);
-      if (error.response.status === 401) {
-      }
+      setIsLoading(false)
     }
   };
 
@@ -114,13 +122,14 @@ export const PostingBox = () => {
                 )}
               </Grid>
               <Grid display={"flex"} justifyContent={"end"} item xs={4}>
-                <Button
+                <LoadingButton
                   size="small"
+                  loading={isLoading}
                   onClick={() => handlePostSubmit()}
                   variant="contained"
                 >
                   Publicar
-                </Button>
+                </LoadingButton>
               </Grid>
             </Grid>
           </Box>
