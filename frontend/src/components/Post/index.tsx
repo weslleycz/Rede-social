@@ -3,6 +3,8 @@ import { UserAvatar } from "../UserAvatar";
 import styles from "./style.module.scss";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import { formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 type Props = {
   id: string;
@@ -11,6 +13,7 @@ type Props = {
   links: string[];
   comments: any[];
   userId: string;
+  createDate: string;
   user: {
     name: string;
     id: string;
@@ -25,6 +28,7 @@ export const Post = ({
   urlImg,
   userId,
   user,
+  createDate,
 }: Props) => {
   return (
     <>
@@ -40,19 +44,27 @@ export const Post = ({
           <UserAvatar {...user} />
           <Box>
             <strong className={styles["post-title"]}>Fracisco Weslley</strong>
-            <p className={styles["post-data"]}>23/11/2024</p>
+            <p className={styles["post-data"]}>
+              {" "}
+              {formatDistanceToNow(createDate, {
+                addSuffix: true,
+                locale: ptBR,
+              }).toString()}
+            </p>
           </Box>
         </Stack>
         <Box className={styles["post-text"]}>
           <p>{content}</p>
         </Box>
-        <Box className={styles["post-img"]} marginTop={2}>
-          <img
-            width={"auto"}
-            height={390}
-            src={`${process.env.API_Url}/post/img${urlImg}`}
-          />
-        </Box>
+        {urlImg != null ? (
+          <Box className={styles["post-img"]} marginTop={2}>
+            <img
+              width={"auto"}
+              height={450}
+              src={`${process.env.API_Url}/post/img${urlImg}`}
+            />
+          </Box>
+        ) : null}
         <Box display={"flex"} marginTop={2}>
           <Box marginRight={2} display={"flex"}>
             <FavoriteBorderIcon sx={{ color: "gray" }} />

@@ -1,20 +1,19 @@
 import { UploadImg } from "@/components/UploadImg"; // Corrigindo o nome do componente
 import { api } from "@/services/api";
 import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
-import { Box, Button, Grid, IconButton, TextField } from "@mui/material";
-import { useState } from "react";
-import { QueryClient } from "react-query";
 import { LoadingButton } from "@mui/lab";
+import { Box, Grid, IconButton, TextField } from "@mui/material";
+import { useState } from "react";
+import { useQuery } from "react-query";
 
 export const PostingBox = () => {
   const [postContent, setPostContent] = useState("");
+  const { refetch } = useQuery("getFeed");
 
   const [imageBase64, setImageBase64] = useState("");
   const [imageName, setImageName] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const queryClient = new QueryClient();
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -36,7 +35,7 @@ export const PostingBox = () => {
       return;
     }
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const res = await api.post("/post", {
         img: imageBase64,
         text: postContent,
@@ -44,11 +43,11 @@ export const PostingBox = () => {
       setImageBase64("");
       setPostContent("");
       setImageName("");
-      queryClient.invalidateQueries("getFeed");
-      setIsLoading(false)
+      refetch();
+      setIsLoading(false);
     } catch (error: any) {
       console.log(error.response.status);
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 

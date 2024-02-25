@@ -1,115 +1,102 @@
 "use client";
 
-import { Header } from "@/components/Header";
-import { Menu } from "@/components/Menu";
+import { FeedContainer } from "@/components/FeedContainer";
 import { Post } from "@/components/Post";
 import { PostingBox } from "@/components/PostingBox";
 import { api } from "@/services/api";
 import { socket } from "@/services/socket";
-import { Box, Container, Grid, Paper } from "@mui/material";
+import { Box, Container, Skeleton } from "@mui/material";
 import { getCookie } from "cookies-next";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useQuery } from "react-query";
 
 const Feed = () => {
-  const [isLoadingFeed, setIsLoadingFeed] = useState(true);
-
-  const { data, isLoading, isError } = useQuery("getFeed", async () => {
-    const res = await api.get("/post/feed");
-    console.log(res.data);
-    return res.data;
-  });
-
-  useEffect(() => {
-    const loadingTimeout = setTimeout(() => {
-      setIsLoadingFeed(false);
-    }, 100);
-    return () => clearTimeout(loadingTimeout);
-  }, []);
+  const { data, isLoading, isError, refetch } = useQuery(
+    "getFeed",
+    async () => {
+      const res = await api.get("/post/feed");
+      return res.data;
+    }
+  );
 
   useEffect(() => {
-    socket.emit(`feed`, {
+    const socketInstancia = socket;
+    socketInstancia.emit(`feed`, {
       clientId: getCookie("token") as string,
     });
-    socket.on("feed", (data: any) => {
-      console.log(data);
+
+    socketInstancia.on("feed", (data: any) => {
+      refetch();
     });
+
+    return () => {
+      socketInstancia.off("feed", (data: any) => {});
+    };
   }, []);
 
   return (
     <>
-      <Box style={{ background: "#EBEBEB", padding: 2 }}>
-        <Header />
-        {isLoadingFeed ? null : (
-          <Grid container>
-            <Grid item xs>
-              <Box
-                sx={{
-                  height: "70vh",
-                  borderRadius: 0,
-                  background: "#ffffff",
-                  display: "flex",
-                  position: "sticky",
-                  top: 0,
-                }}
-              >
-                <Menu />
+      <FeedContainer>
+        <Container maxWidth="md">
+          <PostingBox />
+
+          <Box
+            sx={{
+              borderRadius: 0,
+              background: "#EBEBEB",
+              height: "80vh",
+            }}
+          >
+            <Box
+              sx={{
+                borderRadius: 0,
+                background: "#EBEBEB",
+                position: "relative",
+                zIndex: 1,
+                overflowY: "auto",
+                maxHeight: "80vh",
+                "::-webkit-scrollbar": {
+                  backgroundColor: "#ff00000",
+                },
+              }}
+            >
+              <Box marginBottom={14}>
+                {isLoading ? (
+                  <>
+                    <Skeleton variant="rounded" width={"100%"} height={100} />
+                    <Skeleton
+                      variant="rounded"
+                      sx={{ marginTop: 1 }}
+                      width={"100%"}
+                      height={100}
+                    />
+                    <Skeleton
+                      variant="rounded"
+                      sx={{ marginTop: 1 }}
+                      width={"100%"}
+                      height={100}
+                    />
+                    <Skeleton
+                      variant="rounded"
+                      sx={{ marginTop: 1 }}
+                      width={"100%"}
+                      height={100}
+                    />
+                  </>
+                ) : (
+                  <>
+                    {data.map((item: any, i: number) => (
+                      <div key={i}>
+                        <Post {...item} />
+                      </div>
+                    ))}
+                  </>
+                )}
               </Box>
-            </Grid>
-
-            <Grid item xs={8}>
-              <Container maxWidth="md">
-                <PostingBox />
-
-                <Box
-                  sx={{
-                    borderRadius: 0,
-                    background: "#EBEBEB",
-                    height: "80vh",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      borderRadius: 0,
-                      background: "#EBEBEB",
-                      position: "relative",
-                      zIndex: 1,
-                      overflowY: "auto",
-                      maxHeight: "80vh",
-                      "::-webkit-scrollbar": {
-                        backgroundColor: "#ff00000",
-                      },
-                    }}
-                  >
-                    <Box marginBottom={14}>
-                      {data.map((item, i) => (
-                        <div key={i}>
-                          <Post {...item} />
-                        </div>
-                      ))}
-                    </Box>
-                  </Box>
-                </Box>
-              </Container>
-            </Grid>
-
-            <Grid item xs>
-              {/* <Box
-                sx={{
-                  height: "85vh",
-                  borderRadius: 0,
-                  background: "#ffff",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  position: "sticky",
-                  top: 0,
-                }}
-              ></Box> */}
-            </Grid>
-          </Grid>
-        )}
-      </Box>
+            </Box>
+          </Box>
+        </Container>
+      </FeedContainer>
     </>
   );
 };

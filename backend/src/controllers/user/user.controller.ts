@@ -1,102 +1,29 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpException,
-  HttpStatus,
-  Param,
-  Post,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { BcryptService } from 'src/services/bcrypt.service';
-import { JWTService } from 'src/services/jwt.service';
-import { NextcloudService } from 'src/services/nextcloud.service';
-import { PrismaService } from '../../services/prisma.service';
+import { UserService } from './user.service';
 import { CreateUserDto, LoginUserDto } from './user.dto';
 
 @Controller('user')
 export class UserController {
-  constructor(
-    private readonly prismaService: PrismaService,
-    private readonly bcryptService: BcryptService,
-    private readonly jwtService: JWTService,
-    private readonly nextcloudService: NextcloudService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   @Post()
-  async create(@Body() { email, name, password }: CreateUserDto) {
-    try {
-      const passwordCrypt = await this.bcryptService.hashPassword(password);
-      const user = await this.prismaService.user.create({
-        data: {
-          email,
-          name,
-          password: passwordCrypt,
-        },
-      });
-      await this.nextcloudService.createFolder(user.id);
-      const token = await this.jwtService.login(user.id);
-      return { token, id: user.id };
-    } catch (error) {
-      throw new HttpException(
-        'Não foi possível cadastrar o usuário',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+  async create(@Body() createUserDto: CreateUserDto) {
+    return await this.userService.createUser(createUserDto);
   }
 
   @Post('/login')
-  async login(@Body() { email, password }: LoginUserDto) {
-    try {
-      const user = await this.prismaService.user.findFirst({
-        where: { email },
-      });
-      if (!user) {
-        throw new HttpException('Usuário ou senha inválidos', 401);
-      }
-      const isPasswordValid = await this.bcryptService.comparePasswords(
-        password,
-        user.password,
-      );
-      if (!isPasswordValid) {
-        throw new HttpException('Usuário ou senha inválidos', 401);
-      }
-      const token = await this.jwtService.login(user.id);
-      return { token, id: user.id };
-    } catch (error) {
-      throw new HttpException('Usuário ou senha inválidos', 401);
-    }
+  async login(@Body() loginUserDto: LoginUserDto) {
+    return await this.userService.login(loginUserDto);
   }
 
   @Get('/avatar/:id')
   async getAvatar(@Param('id') id: string, @Res() res: Response) {
-    try {
-      const avatar = await this.nextcloudService.getFile({
-        fileBaseName: 'avatar.jpg',
-        folderName: id,
-      });
-      res.setHeader(
-        'Content-Disposition',
-        `attachment; filename=${id}-avatar.jpg`,
-      );
-      res.setHeader('Content-Type', 'image/jpeg');
-      res.send(avatar);
-    } catch (error) {
-      throw new HttpException('Avatar não encontrado', 400);
-    }
+    return await this.userService.getAvatar(id, res);
   }
 
   @Post('/upload/:id')
   async upload(@Body() data: any, @Param('id') id: string) {
-    if (typeof data?.data !== 'string') {
-      throw new Error('Os dados devem ser uma string base64 válida');
-    }
-    const file = Buffer.from(data?.data, 'base64');
-    return await this.nextcloudService.upload({
-      data: file,
-      fileBaseName: 'avatar.jpg',
-      folderName: id,
-    });
+    return await this.userService.uploadAvatar(data, id);
   }
 }
