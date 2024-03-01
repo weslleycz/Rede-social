@@ -53,9 +53,21 @@ export const Login = ({ setIsRegister }: Props) => {
           secure: false,
           sameSite: "lax",
         });
+        setCookie("id", res.data.id, {
+          expires: expirationDate,
+          secure: false,
+          sameSite: "lax",
+        });
+        setCookie("clintSession", false, {
+          expires: expirationDate,
+          secure: false,
+          sameSite: "lax",
+        });
         window.location.replace("/feed");
       } else {
         window.document.cookie = `token=${res.data.token}; session=true secure=false`;
+        window.document.cookie = `id=${res.data.id}; session=true secure=false`;
+        window.document.cookie = `clintSession=${true}; session=true secure=false`;
         window.location.replace("/feed");
       }
     } catch (error:any) {

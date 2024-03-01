@@ -18,25 +18,6 @@ export const Auth = () => {
     return () => clearTimeout(loadingTimeout);
   }, []);
 
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  useEffect(() => {
-    const darkModeMediaQuery = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    );
-
-    const updateTheme = (event: any) => {
-      setIsDarkMode(event.matches);
-    };
-
-    darkModeMediaQuery.addListener(updateTheme);
-
-    updateTheme(darkModeMediaQuery);
-
-    return () => {
-      darkModeMediaQuery.removeListener(updateTheme);
-    };
-  }, []);
-
   return (
     <>
       {isLoading ? null : (

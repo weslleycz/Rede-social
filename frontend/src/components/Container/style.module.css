@@ -1,1 +1,10 @@
-.dark{height:100vh;background-color:#0a0a0a;color:#fff}.light{height:100vh;background-color:#fbf6ff}
+.dark {
+  height: 100vh;
+  background-color: #0a0a0a;
+  color: #ffffff;
+}
+
+.light {
+  height: 100vh;
+  background-color: #FBF6FF;
+}/*# sourceMappingURL=style.module.css.map */

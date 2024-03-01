@@ -15,6 +15,7 @@ import { PrismaService } from './services/prisma.service';
 import { RedisService } from './services/redis.service';
 import { FeedGateway } from './websockets/feed/feed.gateway';
 import { UserService } from './controllers/user/user.service';
+import { OnlineCheckGateway } from './websockets/online-check/online-check.gateway';
 
 @Module({
   imports: [],
@@ -36,6 +37,7 @@ import { UserService } from './controllers/user/user.service';
       useClass: HttpExceptionFilter,
     },
     FeedGateway,
+    OnlineCheckGateway,
   ],
 })
 export class AppModule {}

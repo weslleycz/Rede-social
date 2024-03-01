@@ -27,6 +27,5 @@ export class FeedGateway implements OnGatewayConnection, OnGatewayDisconnect {
         });
       }
     }, 1000);
-    // }, 10000); // 10 seconds
   }
 }

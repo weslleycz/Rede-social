@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Header } from "../../components/Header";
 import { Box } from "@mui/material";
-import { OnlineContainer } from "@/components/OnlineContainer";
 
 export const metadata: Metadata = {
   title: "Feed",
@@ -15,12 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <>
-    <OnlineContainer>
-    <Box style={{ background: "#EBEBEB", padding: 2 }}>
+      <Box style={{ background: "#EBEBEB", padding: 2 }}>
         <Header />
         {children}
       </Box>
-    </OnlineContainer>
     </>
   );
 }
