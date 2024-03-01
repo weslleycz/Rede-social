@@ -137,7 +137,8 @@ export class PostService {
 
   async getAllByIdUser(userId: string) {
     try {
-      return await this.prismaService.post.findMany({
+      //
+      const posts = await this.prismaService.post.findMany({
         where: {
           user: {
             id: userId,
@@ -147,6 +148,7 @@ export class PostService {
           comments: true,
         },
       });
+      return posts.reverse();
     } catch (error) {
       throw new HttpException('Post não encontrado', 400);
     }
