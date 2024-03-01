@@ -81,7 +81,6 @@ export class PostService {
     const userId = await this.redisService.getValue(
       req.headers.token as string,
     );
-
     const user = await this.prismaService.user.findUnique({
       where: {
         id: userId,
@@ -140,7 +139,12 @@ export class PostService {
     try {
       return await this.prismaService.post.findMany({
         where: {
-          id: userId,
+          user: {
+            id: userId,
+          },
+        },
+        include: {
+          comments: true,
         },
       });
     } catch (error) {

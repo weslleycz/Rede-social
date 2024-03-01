@@ -86,4 +86,18 @@ export class UserService {
       folderName: id,
     });
   }
+
+  async select(id: string) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        friends: true,
+      },
+    });
+    delete user.password;
+    delete user.chatId;
+    return user;
+  }
 }

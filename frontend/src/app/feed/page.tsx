@@ -39,7 +39,6 @@ const Feed = () => {
       <FeedContainer>
         <Container maxWidth="md">
           <PostingBox />
-
           <Box
             sx={{
               borderRadius: 0,

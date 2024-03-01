@@ -32,7 +32,7 @@ export class PostController {
 
   @Get('/user/:userId')
   async getAllByIdUser(@Param('userId') userId: string) {
-    await this.postService.getAllByIdUser(userId);
+    return await this.postService.getAllByIdUser(userId);
   }
 
   @Get('/img/:userId/:nameFile')

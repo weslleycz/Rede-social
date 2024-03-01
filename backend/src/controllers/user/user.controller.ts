@@ -26,4 +26,9 @@ export class UserController {
   async upload(@Body() data: any, @Param('id') id: string) {
     return await this.userService.uploadAvatar(data, id);
   }
+
+  @Get('/select/:id')
+  async select(@Param('id') id: string) {
+    return await this.userService.select(id);
+  }
 }

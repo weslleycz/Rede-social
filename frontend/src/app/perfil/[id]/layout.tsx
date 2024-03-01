@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
-import { Header } from "../../components/Header";
-import { Box } from "@mui/material";
 import { OnlineContainer } from "@/components/OnlineContainer";
+import { Box } from "@mui/material";
+import type { Metadata } from "next";
+import { Header } from "../../../components/Header";
 
 export const metadata: Metadata = {
   title: "Perfil",
