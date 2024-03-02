@@ -17,7 +17,7 @@ export const PerfilPost = ({ id }: Props) => {
   );
   return (
     <>
-      <Box marginBottom={2} p={1}>
+      <Box  marginBottom={2} p={1}>
         <Box
           sx={{
             borderRadius: 0,
@@ -58,7 +58,7 @@ export const PerfilPost = ({ id }: Props) => {
               <>
                 {data.map((item: any, i: number) => (
                   <div key={i}>
-                    <Post {...item} />
+                    <Post refetch={refetch} {...item} />
                   </div>
                 ))}
               </>

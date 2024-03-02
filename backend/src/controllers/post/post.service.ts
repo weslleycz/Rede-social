@@ -137,7 +137,6 @@ export class PostService {
 
   async getAllByIdUser(userId: string) {
     try {
-      //
       const posts = await this.prismaService.post.findMany({
         where: {
           user: {
@@ -151,6 +150,63 @@ export class PostService {
       return posts.reverse();
     } catch (error) {
       throw new HttpException('Post não encontrado', 400);
+    }
+  }
+
+  async linkPost(id: string, req: Request) {
+    try {
+      const token = req.headers.token as string;
+      if (!token) {
+        throw new HttpException('Token not provided', 400);
+      }
+
+      const idUser = await this.redisService.getValue(token);
+
+      const post = await this.prismaService.post.findFirst({
+        where: {
+          id,
+        },
+      });
+
+      if (!post) {
+        throw new HttpException('Post não encontrado', 404);
+      }
+
+      const userIndex = post.links.indexOf(idUser);
+
+      if (userIndex !== -1) {
+        // Remove idUser from links
+        const links = post.links
+          .slice(0, userIndex)
+          .concat(post.links.slice(userIndex + 1));
+
+        const postUpdate = await this.prismaService.post.update({
+          where: {
+            id: post.id,
+          },
+          data: {
+            links: links,
+          },
+        });
+
+        return postUpdate.links;
+      } else {
+        // Add idUser to links
+        const links = [...post.links, idUser];
+
+        const postUpdate = await this.prismaService.post.update({
+          where: {
+            id: post.id,
+          },
+          data: {
+            links: links,
+          },
+        });
+
+        return postUpdate.links;
+      }
+    } catch (error) {
+      throw new HttpException('Erro interno', 500);
     }
   }
 }

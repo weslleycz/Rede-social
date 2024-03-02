@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 import { RedisService } from 'src/services/redis.service';
 
 @Injectable()
-export class RoleInterceptor implements NestInterceptor {
+export class InterceptorJwt implements NestInterceptor {
   constructor(private readonly redisService: RedisService) {}
 
   async intercept(

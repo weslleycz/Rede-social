@@ -10,7 +10,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { RoleInterceptor } from 'src/middlewares/roles.middleware';
+import { InterceptorJwt } from 'src/middlewares/roles.middleware';
 import { PostService } from './post.service';
 import { CreatePostDto } from './post.dto';
 
@@ -19,12 +19,12 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Post()
-  @UseInterceptors(RoleInterceptor)
+  @UseInterceptors(InterceptorJwt)
   async create(@Body() { img, text }: CreatePostDto, @Req() req: Request) {
     return await this.postService.createPost(img, text, req);
   }
 
-  @UseInterceptors(RoleInterceptor)
+  @UseInterceptors(InterceptorJwt)
   @Get('/feed')
   async getPostsByUser(@Req() req: Request) {
     return await this.postService.getPostsByUser(req);
@@ -56,5 +56,11 @@ export class PostController {
     } catch (error) {
       throw new HttpException('Imagem não encontrada', 400);
     }
+  }
+
+  @UseInterceptors(InterceptorJwt)
+  @Get('/link/:id')
+  async linkPost(@Param('id') id: string, @Req() req: Request) {
+    return await this.postService.linkPost(id, req);
   }
 }

@@ -2,12 +2,17 @@ import { Box, Paper, Stack } from "@mui/material";
 import { UserAvatar } from "../UserAvatar";
 import styles from "./style.module.scss";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { getCookie } from "cookies-next";
+import { useEffect, useState } from "react";
+import { api } from "@/services/api";
 
 type Props = {
   id: string;
+  refetch: any;
   content: string;
   urlImg: string;
   links: string[];
@@ -30,6 +35,19 @@ export const Post = ({
   user,
   createDate,
 }: Props) => {
+  const [liked, setLiked] = useState<string[]>([]);
+  const handleLiked = async () => {
+    try {
+      const res = await api.get(`/post/link/${id}`);
+      setLiked([...res.data]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    setLiked([...links]);
+  }, []);
   return (
     <>
       <Paper
@@ -67,8 +85,18 @@ export const Post = ({
         ) : null}
         <Box display={"flex"} marginTop={2}>
           <Box marginRight={2} display={"flex"}>
-            <FavoriteBorderIcon sx={{ color: "gray" }} />
-            <p className={styles["footer-text"]}>{links.length} Likes</p>
+            {liked.indexOf(getCookie("id") as string) !== -1 ? (
+              <FavoriteIcon
+                onClick={() => handleLiked()}
+                sx={{ color: "#DC4A6E", cursor: "pointer" }}
+              />
+            ) : (
+              <FavoriteBorderIcon
+                onClick={() => handleLiked()}
+                sx={{ color: "gray", cursor: "pointer" }}
+              />
+            )}
+            <p className={styles["footer-text"]}>{liked.length} Likes</p>
           </Box>
           <Box display={"flex"}>
             <ChatBubbleOutlineIcon sx={{ color: "gray" }} />

@@ -86,7 +86,7 @@ const Feed = () => {
                   <>
                     {data.map((item: any, i: number) => (
                       <div key={i}>
-                        <Post {...item} />
+                        <Post refetch={refetch} {...item} />
                       </div>
                     ))}
                   </>

@@ -6,7 +6,7 @@ import { HttpExceptionFilter } from './common/exceptions/http-exception.filter';
 import { PostController } from './controllers/post/post.controller';
 import { PostService } from './controllers/post/post.service';
 import { UserController } from './controllers/user/user.controller';
-import { RoleInterceptor } from './middlewares/roles.middleware';
+import { InterceptorJwt } from './middlewares/roles.middleware';
 import { BcryptService } from './services/bcrypt.service';
 import { JWTService } from './services/jwt.service';
 import { NextcloudService } from './services/nextcloud.service';
@@ -29,7 +29,7 @@ import { OnlineCheckGateway } from './websockets/online-check/online-check.gatew
     NextcloudService,
     RedisService,
     EmailService,
-    RoleInterceptor,
+    InterceptorJwt,
     PostService,
     UserService,
     {
