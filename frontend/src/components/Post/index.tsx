@@ -61,7 +61,7 @@ export const Post = ({
         <Stack direction="row" spacing={2}>
           <UserAvatar {...user} />
           <Box>
-            <strong className={styles["post-title"]}>Fracisco Weslley</strong>
+            <strong className={styles["post-title"]}>{user?.name}</strong>
             <p className={styles["post-data"]}>
               {" "}
               {formatDistanceToNow(createDate, {

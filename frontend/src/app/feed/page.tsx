@@ -38,12 +38,11 @@ const Feed = () => {
     <>
       <FeedContainer>
         <Container maxWidth="md">
-          <PostingBox />
           <Box
             sx={{
               borderRadius: 0,
               background: "#EBEBEB",
-              height: "80vh",
+              height: "100vh",
             }}
           >
             <Box
@@ -53,7 +52,7 @@ const Feed = () => {
                 position: "relative",
                 zIndex: 1,
                 overflowY: "auto",
-                maxHeight: "80vh",
+                maxHeight: "100vh",
                 "::-webkit-scrollbar": {
                   backgroundColor: "#ff00000",
                 },
@@ -84,6 +83,7 @@ const Feed = () => {
                   </>
                 ) : (
                   <>
+                    <PostingBox />
                     {data.map((item: any, i: number) => (
                       <div key={i}>
                         <Post refetch={refetch} {...item} />

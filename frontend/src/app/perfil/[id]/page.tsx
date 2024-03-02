@@ -23,13 +23,31 @@ const Perfil = ({ params }: { params: { id: string } }) => {
       return res.data as User;
     }
   );
-  
+
   return (
     <>
       <FeedContainer>
         <Box p={1}>
-          <UserProfile user={data} idUser={idUser} id={params.id} />
-          <PerfilPost id={params.id} />
+          <Box
+            sx={{
+              borderRadius: 0,
+              background: "#ffffff0",
+              position: "relative",
+              zIndex: 1,
+              overflowY: "auto",
+              maxHeight: "100vh",
+              "::-webkit-scrollbar": {
+                width: "0.4em",
+                backgroundColor: "transparent", 
+              },
+              "::-webkit-scrollbar-thumb": {
+                backgroundColor: "transparent",
+              },
+            }}
+          >
+            <UserProfile user={data} idUser={idUser} id={params.id} />
+            <PerfilPost id={params.id} />
+          </Box>
         </Box>
       </FeedContainer>
     </>

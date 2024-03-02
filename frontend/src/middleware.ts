@@ -4,7 +4,7 @@ import { NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 
 export const config = {
-  matcher: ["/_not-found", "/", "/feed", "/perfil"],
+  matcher: ["/_not-found", "/", "/feed", "/perfil/:page*"],
 };
 
 export async function middleware(req: NextRequest, res: NextApiResponse) {

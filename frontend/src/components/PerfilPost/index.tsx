@@ -18,19 +18,6 @@ export const PerfilPost = ({ id }: Props) => {
   return (
     <>
       <Box  marginBottom={2} p={1}>
-        <Box
-          sx={{
-            borderRadius: 0,
-            background: "#ffffff0",
-            position: "relative",
-            zIndex: 1,
-            overflowY: "auto",
-            maxHeight: "80vh",
-            "::-webkit-scrollbar": {
-              backgroundColor: "#ff00000",
-            },
-          }}
-        >
           <Box marginBottom={25}>
             {isLoading ? (
               <>
@@ -64,7 +51,6 @@ export const PerfilPost = ({ id }: Props) => {
               </>
             )}
           </Box>
-        </Box>
       </Box>
     </>
   );

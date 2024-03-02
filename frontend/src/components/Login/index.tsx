@@ -9,7 +9,6 @@ import {
   Typography,
 } from "@mui/material";
 import { setCookie } from "cookies-next";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { isEmail } from "validator";
 
@@ -24,24 +23,25 @@ export const Login = ({ setIsRegister }: Props) => {
   const [errorPassword, setErrorPassword] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
 
-  const router = useRouter();
-
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+  
     if (email === "") {
       setErrorEmail("Você precisa informar o seu e-mail");
       return;
     }
     if (password === "") {
-      setErrorEmail("Você precisa informar o seu e-mail");
+      setErrorPassword("Você precisa informar a sua senha");
       return;
     }
     if (!isEmail(email)) {
       setErrorEmail("Este e-mail não é válido");
       return;
     }
+  
     const expirationDate = new Date();
     expirationDate.setTime(expirationDate.getTime() + 72 * 60 * 60 * 1000);
+  
     try {
       const res = await api.post("/user/login", {
         email,
@@ -70,11 +70,12 @@ export const Login = ({ setIsRegister }: Props) => {
         window.document.cookie = `clintSession=${true}; session=true secure=false`;
         window.location.replace("/feed");
       }
-    } catch (error:any) {
-      setErrorEmail(error.response.data.message)
+    } catch (error: any) {
+      e.preventDefault();
+      setErrorEmail(error.response.data.message);
+      return;
     }
   };
-
   return (
     <>
       <Box height={"50%"} bgcolor={"#ffff"}>

@@ -145,6 +145,12 @@ export class PostService {
         },
         include: {
           comments: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
         },
       });
       return posts.reverse();

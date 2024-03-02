@@ -16,7 +16,7 @@ export const UserProfile = ({ id, idUser, user }: Props) => {
       paddingBottom={1}
       marginTop={1}
       sx={{
-        background: "linear-gradient(to bottom, #61ffb3 50%, #ffffff 50%)",
+        background: "linear-gradient(to bottom, #4efda9 50%, #ffffff 50%)",
       }}
     >
       <Grid container spacing={2}>
@@ -34,6 +34,7 @@ export const UserProfile = ({ id, idUser, user }: Props) => {
                   height: 110,
                   fontSize: "50px",
                   borderRadius: "50%",
+                  border: "4px solid #fff"
                 }}
                 alt={user?.name}
                 src="/static/images/avatar/1.jpg"
