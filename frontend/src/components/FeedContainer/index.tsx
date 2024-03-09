@@ -26,7 +26,7 @@ export const FeedContainer = ({ children }: Props) => {
           <Grid item xs>
             <Box
               sx={{
-                height: "70vh",
+                height: "85vh",
                 borderRadius: 0,
                 background: "#ffffff",
                 display: "flex",
@@ -43,7 +43,7 @@ export const FeedContainer = ({ children }: Props) => {
           </Grid>
 
           <Grid item xs>
-            {/* <Box
+            <Box
                 sx={{
                   height: "85vh",
                   borderRadius: 0,
@@ -54,7 +54,7 @@ export const FeedContainer = ({ children }: Props) => {
                   position: "sticky",
                   top: 0,
                 }}
-              ></Box> */}
+              ></Box>
           </Grid>
         </Grid>
       )}

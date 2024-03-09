@@ -9,6 +9,7 @@ import { ptBR } from "date-fns/locale";
 import { getCookie } from "cookies-next";
 import { useEffect, useState } from "react";
 import { api } from "@/services/api";
+import Link from "next/link";
 
 type Props = {
   id: string;
@@ -59,7 +60,9 @@ export const Post = ({
         elevation={0}
       >
         <Stack direction="row" spacing={2}>
-          <UserAvatar {...user} />
+          <Link href={`/perfil/${userId}`}>
+            <UserAvatar {...user} />
+          </Link>
           <Box>
             <strong className={styles["post-title"]}>{user?.name}</strong>
             <p className={styles["post-data"]}>

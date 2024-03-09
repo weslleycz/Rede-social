@@ -100,4 +100,26 @@ export class UserService {
     delete user.chatId;
     return user;
   }
+
+  async search(name: string) {
+    const users = await this.prismaService.user.findMany({
+      where: {
+        name: {
+          contains: name,
+        },
+      },
+      select: {
+        status: true,
+        email: true,
+        name: true,
+        id: true,
+        friends: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    return users;
+  }
 }

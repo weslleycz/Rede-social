@@ -1,6 +1,5 @@
-import { Avatar, Box, Button, Grid, Stack, Typography } from "@mui/material";
-import PeopleIcon from "@mui/icons-material/People";
 import AddIcon from "@mui/icons-material/Add";
+import { Avatar, Box, Button, Grid, Stack, Typography } from "@mui/material";
 
 import { User } from "../../../types/user";
 
@@ -16,7 +15,7 @@ export const UserProfile = ({ id, idUser, user }: Props) => {
       paddingBottom={1}
       marginTop={1}
       sx={{
-        background: "linear-gradient(to bottom, #4efda9 50%, #ffffff 50%)",
+        background: "linear-gradient(to bottom, #abffbd 50%, #ffffff 50%)",
       }}
     >
       <Grid container spacing={2}>

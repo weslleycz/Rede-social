@@ -65,19 +65,6 @@ export const Menu = () => {
         </Grid>
       </Button>
 
-      <Button
-        fullWidth
-        variant="text"
-        color="primary"
-        style={{ textTransform: "none" }}
-      >
-        <Grid container spacing={1} alignItems="center">
-          <Grid item>
-            <ExploreIcon />
-          </Grid>
-          <Grid item>{capitalizeFirstLetter("explorar")}</Grid>
-        </Grid>
-      </Button>
     </Box>
   );
 };

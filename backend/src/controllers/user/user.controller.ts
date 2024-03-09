@@ -31,4 +31,9 @@ export class UserController {
   async select(@Param('id') id: string) {
     return await this.userService.select(id);
   }
+
+  @Get('/search/:name')
+  async search(@Param('name') name: string) {
+    return await this.userService.search(name);
+  }
 }
