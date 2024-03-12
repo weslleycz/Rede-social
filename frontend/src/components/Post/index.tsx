@@ -56,6 +56,7 @@ export const Post = ({
           background: "#ffffff",
           padding: 2,
           margin: "10px 0",
+          zIndex: -10,
         }}
         elevation={0}
       >
@@ -83,6 +84,13 @@ export const Post = ({
               width={"auto"}
               height={450}
               src={`${process.env.API_Url}/post/img${urlImg}`}
+              style={{
+                width: "100%",
+                height: "auto",
+                maxWidth: "100%",
+                maxHeight: "450px",
+                objectFit: "cover",
+              }}
             />
           </Box>
         ) : null}

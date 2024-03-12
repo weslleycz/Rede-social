@@ -5,12 +5,13 @@ import { Post } from "@/components/Post";
 import { PostingBox } from "@/components/PostingBox";
 import { api } from "@/services/api";
 import { socket } from "@/services/socket";
-import { Box, Container, Skeleton } from "@mui/material";
+import { Box, Container, Skeleton, useMediaQuery } from "@mui/material";
 import { getCookie } from "cookies-next";
 import { useEffect } from "react";
 import { useQuery } from "react-query";
 
 const Feed = () => {
+  const matches = useMediaQuery("(min-width:900px)");
   const { data, isLoading, isError, refetch } = useQuery(
     "getFeed",
     async () => {
@@ -58,7 +59,7 @@ const Feed = () => {
                 },
               }}
             >
-              <Box marginBottom={14}>
+              <Box  marginBottom={25}>
                 {isLoading ? (
                   <>
                     <Skeleton variant="rounded" width={"100%"} height={100} />

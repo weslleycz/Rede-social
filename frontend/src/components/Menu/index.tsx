@@ -87,7 +87,7 @@ export const Menu = () => {
           <Grid item>
             <ExitToAppIcon />
           </Grid>
-          <Grid item>{capitalizeFirstLetter("Perfil")}</Grid>
+          <Grid item>{capitalizeFirstLetter("Sair")}</Grid>
         </Grid>
       </Button>
     </Box>

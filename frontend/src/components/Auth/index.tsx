@@ -8,15 +8,34 @@ import { useEffect, useState } from "react";
 import { Register } from "../Register";
 
 export const Auth = () => {
-  const matches = useMediaQuery("(min-width:600px)");
+  const matches = useMediaQuery("(min-width:900px)");
   const [isRegister, setIsRegister] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const loadingTimeout = setTimeout(() => {
       setIsLoading(false);
     }, 100);
     return () => clearTimeout(loadingTimeout);
   }, []);
+
+  const renderContent = () => (
+    <Container
+      sx={{
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+      }}
+      component="main"
+      maxWidth="xs"
+    >
+      {isRegister ? (
+        <Register setIsRegister={setIsRegister} />
+      ) : (
+        <Login setIsRegister={setIsRegister} />
+      )}
+    </Container>
+  );
 
   return (
     <>
@@ -27,7 +46,7 @@ export const Auth = () => {
               container
               rowSpacing={1}
               columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-              sx={{background: "#ffff", paddingTop:1}}
+              sx={{ background: "#ffff", paddingTop: 1 }}
             >
               <Grid
                 sx={{
@@ -48,54 +67,12 @@ export const Auth = () => {
                 />
               </Grid>
               <Grid item xs={6}>
-                <Container
-                  sx={{
-                    height: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                  component="main"
-                  maxWidth="xs"
-                >
-                  {isRegister ? (
-                    <Register setIsRegister={setIsRegister} />
-                  ) : (
-                    <Login setIsRegister={setIsRegister} />
-                  )}
-                </Container>
+                {renderContent()}
               </Grid>
             </Grid>
           ) : (
             <Box height={"100vh"} bgcolor={"#ffff"}>
-              <Box
-                alignContent={"center"}
-                bgcolor={"#1aff90"}
-                alignItems={"center"}
-                justifyContent={"center"}
-                display={"flex"}
-                p={2}
-              >
-                <Image
-                  src="/controller.png"
-                  width={100}
-                  height={100}
-                  alt="Controller"
-                />
-              </Box>
-              <Container
-                sx={{
-                  height: "20vh",
-                  alignItems: "center",
-                  display: "flex",
-                }}
-                maxWidth="sm"
-              >
-                {isRegister ? (
-                  <Register setIsRegister={setIsRegister} />
-                ) : (
-                  <Login setIsRegister={setIsRegister} />
-                )}
-              </Container>
+              {renderContent()}
             </Box>
           )}
         </>

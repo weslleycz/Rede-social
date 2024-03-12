@@ -3,9 +3,8 @@
 import { ReactNode, useEffect, useState } from "react";
 
 import { Menu } from "@/components/Menu";
-import { Post } from "@/components/Post";
-import { PostingBox } from "@/components/PostingBox";
-import { Box, Container, Grid } from "@mui/material";
+import { Box, Grid, useMediaQuery } from "@mui/material";
+import { MobileMenu } from "../MobileMenu";
 
 type Props = {
   children: ReactNode;
@@ -13,6 +12,7 @@ type Props = {
 
 export const FeedContainer = ({ children }: Props) => {
   const [isLoadingFeed, setIsLoadingFeed] = useState(true);
+  const matches = useMediaQuery("(min-width:900px)");
   useEffect(() => {
     const loadingTimeout = setTimeout(() => {
       setIsLoadingFeed(false);
@@ -22,44 +22,53 @@ export const FeedContainer = ({ children }: Props) => {
   return (
     <>
       {isLoadingFeed ? null : (
-        <Grid container>
-          <Grid item xs>
-            <Box
-              sx={{
-                height: "85vh",
-                borderRadius: 0,
-                background: "#ffffff",
-                display: "flex",
-                position: "sticky",
-                top: 0,
-              }}
-            >
-              <Menu />
-            </Box>
-          </Grid>
+        <>
+          {matches ? (
+            <>
+              <Grid container>
+                <Grid item xs>
+                  <Box
+                    sx={{
+                      height: "85vh",
+                      borderRadius: 0,
+                      background: "#ffffff",
+                      display: "flex",
+                      position: "sticky",
+                      top: 0,
+                    }}
+                  >
+                    <Menu />
+                  </Box>
+                </Grid>
 
-          <Grid item xs={8}>
-            {children}
-          </Grid>
+                <Grid item xs={8}>
+                  {children}
+                </Grid>
 
-          <Grid item xs>
-            <Box
-                sx={{
-                  height: "85vh",
-                  borderRadius: 0,
-                  background: "#ffff",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  position: "sticky",
-                  top: 0,
-                }}
-              ></Box>
-          </Grid>
-        </Grid>
+                <Grid item xs>
+                  <Box
+                    sx={{
+                      height: "85vh",
+                      borderRadius: 0,
+                      background: "#ffff",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      position: "sticky",
+                      top: 0,
+                      zIndex: 1000
+                    }}
+                  ></Box>
+                </Grid>
+              </Grid>
+            </>
+          ) : (
+            <>{children}
+            <MobileMenu />
+            </>
+          )}
+        </>
       )}
     </>
   );
 };
-
-
