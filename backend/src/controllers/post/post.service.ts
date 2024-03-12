@@ -91,10 +91,16 @@ export class PostService {
             id: true,
           },
         },
+        friendOf: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
 
-    const friendIds = user?.friends.map((friend) => friend.id) || [];
+    const friendOfIds = user?.friendOf.map((friend) => friend.id) || [];
+    const friendsIds = user?.friends.map((friend) => friend.id) || [];
 
     const posts = await this.prismaService.post.findMany({
       where: {
@@ -104,7 +110,12 @@ export class PostService {
           },
           {
             userId: {
-              in: friendIds,
+              in: friendOfIds,
+            },
+          },
+          {
+            userId: {
+              in: friendsIds,
             },
           },
         ],

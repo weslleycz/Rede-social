@@ -1,9 +1,7 @@
-import AddIcon from "@mui/icons-material/Add";
-import { Box, Button, Grid, Link, Paper } from "@mui/material";
+import { Box, Grid, Link, Paper } from "@mui/material";
 import { User } from "../../../types/user";
+import { AddFriend } from "../AddFriend";
 import { UserAvatar } from "../UserAvatar";
-import { getCookie } from "cookies-next";
-import CloseIcon from "@mui/icons-material/Close";
 
 export const ExplorarUser = (user: User) => {
   return (
@@ -27,25 +25,7 @@ export const ExplorarUser = (user: User) => {
           <Grid item xs={9} md={11}>
             <Box justifyContent={"space-between"} display={"flex"}>
               <Link href={`/perfil/${user.id}`}>{user.name}</Link>
-              {user.friends.indexOf(getCookie("id")) === -1 ? (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                  startIcon={<AddIcon />}
-                >
-                  Adicionar amigo
-                </Button>
-              ) : (
-                <Button
-                  variant="contained"
-                  color="error"
-                  size="large"
-                  startIcon={<CloseIcon />}
-                >
-                  Cancelar amizade
-                </Button>
-              )}
+              <AddFriend user={user} />
             </Box>
           </Grid>
         </Grid>

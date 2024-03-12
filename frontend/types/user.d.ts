@@ -4,5 +4,6 @@ export type User = {
     name: string;
     status: string;
     friends: any[];
+    friendOf: any[];
   };
   

@@ -1,7 +1,7 @@
-import AddIcon from "@mui/icons-material/Add";
 import { Avatar, Box, Button, Grid, Stack, Typography } from "@mui/material";
 
 import { User } from "../../../types/user";
+import { AddFriend } from "../AddFriend";
 
 type Props = {
   id: string;
@@ -33,7 +33,7 @@ export const UserProfile = ({ id, idUser, user }: Props) => {
                   height: 110,
                   fontSize: "50px",
                   borderRadius: "50%",
-                  border: "4px solid #fff"
+                  border: "4px solid #fff",
                 }}
                 alt={user?.name}
                 src="/static/images/avatar/1.jpg"
@@ -56,26 +56,13 @@ export const UserProfile = ({ id, idUser, user }: Props) => {
           </Box>
         </Grid>
         <Grid item xs={12} md={9}>
-          <Box display="flex" justifyContent="space-between" marginTop={2}>
-            {idUser === id ? null : (
-              <Box
-                justifyContent="flex-end"
-                display="flex"
-                flexGrow={1}
-                textAlign="center"
-                height="60%"
-                p={3}
-              >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                  startIcon={<AddIcon />}
-                >
-                  Adicionar amigo
-                </Button>
-              </Box>
-            )}
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            marginTop={2}
+            marginRight={4}
+          >
+            <AddFriend user={user} />
           </Box>
         </Grid>
       </Grid>

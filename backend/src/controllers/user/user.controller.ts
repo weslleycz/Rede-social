@@ -1,7 +1,17 @@
-import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
-import { Response } from 'express';
-import { UserService } from './user.service';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Res,
+  Req,
+  UseInterceptors,
+} from '@nestjs/common';
+import { Response, Request } from 'express';
+import { InterceptorJwt } from 'src/middlewares/roles.middleware';
 import { CreateUserDto, LoginUserDto } from './user.dto';
+import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
@@ -35,5 +45,17 @@ export class UserController {
   @Get('/search/:name')
   async search(@Param('name') name: string) {
     return await this.userService.search(name);
+  }
+
+  @Get('/addFriend/:id')
+  @UseInterceptors(InterceptorJwt)
+  async addFriend(@Param('id') id: string, @Req() req: Request) {
+    return await this.userService.addFriend(id, req);
+  }
+
+  @Get('/cancelFriend/:id')
+  @UseInterceptors(InterceptorJwt)
+  async cancelFriend(@Param('id') id: string, @Req() req: Request) {
+    return await this.userService.cancelFriend(id, req);
   }
 }

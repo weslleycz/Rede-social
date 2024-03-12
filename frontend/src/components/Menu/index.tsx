@@ -1,20 +1,26 @@
 "use client";
 
-import React from "react";
-import { Box, Button, Grid } from "@mui/material";
-import ExploreIcon from "@mui/icons-material/Explore";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import FeedIcon from "@mui/icons-material/Feed";
 import InsertCommentIcon from "@mui/icons-material/InsertComment";
 import PersonIcon from "@mui/icons-material/Person";
+import { Box, Button, Grid } from "@mui/material";
+import { getCookie, deleteCookie } from "cookies-next";
 import Link from "next/link";
-import { getCookie } from "cookies-next";
 import { usePathname } from "next/navigation";
 
 export const Menu = () => {
-  const capitalizeFirstLetter = (string) => {
+  const capitalizeFirstLetter = (string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
   const pathname = usePathname();
+
+  const handleExit = () => {
+    deleteCookie("id");
+    deleteCookie("token");
+    deleteCookie("clintSession");
+    window.location.href = "/";
+  };
 
   return (
     <Box p={2} marginTop={3}>
@@ -38,7 +44,9 @@ export const Menu = () => {
       <Link href={`/perfil/${getCookie("id")}`}>
         <Button
           fullWidth
-          variant={pathname === `/perfil/${getCookie("id")}` ? "contained" : "text"}
+          variant={
+            pathname === `/perfil/${getCookie("id")}` ? "contained" : "text"
+          }
           color="primary"
           style={{ textTransform: "none" }}
         >
@@ -51,6 +59,7 @@ export const Menu = () => {
         </Button>
       </Link>
 
+      <Box marginTop={1} />
       <Button
         fullWidth
         variant="text"
@@ -65,6 +74,22 @@ export const Menu = () => {
         </Grid>
       </Button>
 
+      <Box marginTop={1} />
+
+      <Button
+        fullWidth
+        variant={"text"}
+        color="primary"
+        style={{ textTransform: "none" }}
+        onClick={() => handleExit()}
+      >
+        <Grid container spacing={1} alignItems="center">
+          <Grid item>
+            <ExitToAppIcon />
+          </Grid>
+          <Grid item>{capitalizeFirstLetter("Perfil")}</Grid>
+        </Grid>
+      </Button>
     </Box>
   );
 };

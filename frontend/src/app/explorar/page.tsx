@@ -7,6 +7,8 @@ import { Box, Container } from "@mui/material";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "react-query";
 import { User } from "../../../types/user";
+import { getCookie } from "cookies-next";
+import React from "react";
 
 const Explorar = () => {
   const searchParams = useSearchParams();
@@ -15,6 +17,7 @@ const Explorar = () => {
     "getUsers",
     async () => {
       const res = await api.get(`/user/search/${search}`);
+      console.log(res.data);
       return res.data as User[];
     }
   );
@@ -39,7 +42,9 @@ const Explorar = () => {
             ) : (
               <>
                 {data?.map((user) => (
-                  <ExplorarUser {...user} key={user.id} />
+                  <React.Fragment key={user.id}>
+                    {getCookie("id") !== user.id && <ExplorarUser {...user} />}
+                  </React.Fragment>
                 ))}
               </>
             )}

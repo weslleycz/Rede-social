@@ -3,8 +3,9 @@ import { PrismaService } from '../../services/prisma.service';
 import { BcryptService } from 'src/services/bcrypt.service';
 import { JWTService } from 'src/services/jwt.service';
 import { NextcloudService } from 'src/services/nextcloud.service';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { CreateUserDto, LoginUserDto } from './user.dto';
+import { RedisService } from 'src/services/redis.service';
 
 @Injectable()
 export class UserService {
@@ -13,6 +14,7 @@ export class UserService {
     private readonly bcryptService: BcryptService,
     private readonly jwtService: JWTService,
     private readonly nextcloudService: NextcloudService,
+    private readonly redisService: RedisService,
   ) {}
 
   async createUser({ email, name, password }: CreateUserDto) {
@@ -94,6 +96,7 @@ export class UserService {
       },
       include: {
         friends: true,
+        friendOf: true,
       },
     });
     delete user.password;
@@ -105,7 +108,7 @@ export class UserService {
     const users = await this.prismaService.user.findMany({
       where: {
         name: {
-          contains: name,
+          search: name,
         },
       },
       select: {
@@ -118,8 +121,51 @@ export class UserService {
             id: true,
           },
         },
+        friendOf: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
     return users;
+  }
+
+  async addFriend(friendId: string, req: Request) {
+    const userId = await this.redisService.getValue(
+      req.headers.token as string,
+    );
+    try {
+      await this.prismaService.user.update({
+        where: { id: userId },
+        data: {
+          friends: { connect: [{ id: friendId }] },
+        },
+      });
+    } catch (error) {
+      throw new HttpException(
+        'Não foi possível adicionar amigo',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async cancelFriend(friendId: string, req: Request) {
+    const userId = await this.redisService.getValue(
+      req.headers.token as string,
+    );
+    try {
+      await this.prismaService.user.update({
+        where: { id: userId },
+        data: {
+          friends: { disconnect: [{ id: friendId }] },
+        },
+      });
+    } catch (error) {
+      throw new HttpException(
+        'Não foi possível cancelar amizade',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

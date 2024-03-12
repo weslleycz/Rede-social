@@ -3,7 +3,7 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["multiSchema"]
+  previewFeatures = ["multiSchema", "fullTextSearch", "fullTextIndex"]
   schemas         = ["base", "transactional"]
 }
 
@@ -80,6 +80,6 @@ model Comment {
 enum UserStatus {
   Online
   Offline
-  
+
   @@schema("base")
 }
