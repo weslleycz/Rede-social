@@ -1,14 +1,14 @@
 import { Avatar } from "@mui/material";
 
-type Props={
-  name: string,
-  id: string,
-}
+type Props = {
+  name: string;
+  id: string;
+};
 
-export const UserAvatar = ({id,name}:Props) => {
+export const UserAvatar = ({ id, name }: Props) => {
   return (
     <>
-      <Avatar  alt={name} src={id} />
+      <Avatar alt={name} src={id} />
     </>
   );
 };

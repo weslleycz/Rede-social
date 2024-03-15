@@ -87,7 +87,7 @@ const Feed = () => {
                     <PostingBox />
                     {data.map((item: any, i: number) => (
                       <div key={i}>
-                        <Post refetch={refetch} {...item} />
+                        <Post showComments refetch={refetch} {...item} />
                       </div>
                     ))}
                   </>

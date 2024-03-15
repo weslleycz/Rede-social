@@ -12,7 +12,7 @@ import {
 import { Request, Response } from 'express';
 import { InterceptorJwt } from 'src/middlewares/roles.middleware';
 import { PostService } from './post.service';
-import { CreatePostDto } from './post.dto';
+import { CreatePostComment, CreatePostDto } from './post.dto';
 
 @Controller('post')
 export class PostController {
@@ -62,5 +62,25 @@ export class PostController {
   @Get('/link/:id')
   async linkPost(@Param('id') id: string, @Req() req: Request) {
     return await this.postService.linkPost(id, req);
+  }
+
+  @Get('/select/:id')
+  async select(@Param('id') id: string) {
+    return await this.postService.select(id);
+  }
+
+  @Post('/addComment/:id')
+  @UseInterceptors(InterceptorJwt)
+  async addComment(
+    @Param('id') postId: string,
+    @Req() req: Request,
+    @Body() { text }: CreatePostComment,
+  ) {
+    await this.postService.addComment(postId, text, req);
+  }
+
+  @Get('/comments/:id')
+  async getComments(@Param('id') postId: string) {
+    return await this.postService.getComments(postId);
   }
 }

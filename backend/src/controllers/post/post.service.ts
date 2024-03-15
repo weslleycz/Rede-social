@@ -226,4 +226,59 @@ export class PostService {
       throw new HttpException('Erro interno', 500);
     }
   }
+
+  async select(id: string) {
+    return await this.prismaService.post.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            id: true,
+          },
+        },
+        comments: true,
+      },
+    });
+  }
+
+  async addComment(postId: string, text: string, req: Request) {
+    const userId = await this.redisService.getValue(
+      req.headers.token as string,
+    );
+    try {
+      await this.prismaService.comment.create({
+        data: {
+          text,
+          userId,
+          postId,
+        },
+      });
+    } catch (error) {
+      throw new HttpException('Não foi possível fazer o comentario', 400);
+    }
+  }
+
+  async getComments(postId: string) {
+    try {
+      const comments = await this.prismaService.comment.findMany({
+        where: {
+          postId,
+        },
+        include: {
+          user: {
+            select: {
+              name: true,
+              id: true,
+            },
+          },
+        },
+      });
+      return comments.reverse();
+    } catch (error) {
+      throw new HttpException('Postagem não encontrada', 404);
+    }
+  }
 }

@@ -83,13 +83,13 @@ export const PostingBox = () => {
                   border: "none",
                 },
                 "& .MuiInput-underline:before": {
-                  borderBottom: "none", // Remove a borda antes de o campo de texto ser focado
+                  borderBottom: "none",
                 },
                 "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
-                  borderBottom: "none", // Remove a borda ao passar o mouse sobre o campo de texto
+                  borderBottom: "none",
                 },
                 "& .MuiInput-underline:after": {
-                  borderBottom: "none", // Remove a borda após o campo de texto ser focado
+                  borderBottom: "none",
                 },
               },
             }}

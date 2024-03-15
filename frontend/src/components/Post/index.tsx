@@ -24,6 +24,7 @@ type Props = {
     name: string;
     id: string;
   };
+  showComments?: boolean;
 };
 
 export const Post = ({
@@ -35,6 +36,7 @@ export const Post = ({
   userId,
   user,
   createDate,
+  showComments,
 }: Props) => {
   const [liked, setLiked] = useState<string[]>([]);
   const handleLiked = async () => {
@@ -110,10 +112,18 @@ export const Post = ({
             <p className={styles["footer-text"]}>{liked.length} Likes</p>
           </Box>
           <Box display={"flex"}>
-            <ChatBubbleOutlineIcon sx={{ color: "gray" }} />
-            <p className={styles["footer-text"]}>
-              {comments.length} Comentários
-            </p>
+            {showComments ? (
+              <>
+                <Link href={`/post/${id}`}>
+                  <ChatBubbleOutlineIcon sx={{ color: "gray" }} />
+                </Link>
+                <Link href={`/post/${id}`}>
+                  <p className={styles["footer-text"]}>
+                    {comments.length} Comentários
+                  </p>
+                </Link>
+              </>
+            ) : null}
           </Box>
         </Box>
       </Paper>
