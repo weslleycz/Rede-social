@@ -66,25 +66,23 @@ export class UserService {
         fileBaseName: 'avatar.jpg',
         folderName: id,
       });
-      res.setHeader(
-        'Content-Disposition',
-        `attachment; filename=${id}-avatar.jpg`,
-      );
-      res.setHeader('Content-Type', 'image/jpeg');
-      res.send(avatar);
+      return avatar;
     } catch (error) {
       throw new HttpException('Avatar não encontrado', 400);
     }
   }
 
   async uploadAvatar(data: any, id: string) {
-    if (typeof data?.data !== 'string') {
-      throw new Error('Os dados devem ser uma string base64 válida');
-    }
-    const file = Buffer.from(data?.data, 'base64');
-    return await this.nextcloudService.upload({
+    const file = Buffer.from(
+      data.img.replace(
+        `${data.img.substring(0, data.img.indexOf(';'))};base64,`,
+        '',
+      ),
+      'base64',
+    );
+    await this.nextcloudService.upload({
       data: file,
-      fileBaseName: 'avatar.jpg',
+      fileBaseName: `avatar.jpg`,
       folderName: id,
     });
   }

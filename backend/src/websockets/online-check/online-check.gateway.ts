@@ -19,7 +19,6 @@ export class OnlineCheckGateway
   ) {}
 
   async handleDisconnect(client: any) {
-    console.log(1234);
     const id = await this.redisService.getValue(
       this.clientMap.get(client.handshake.auth.token),
     );

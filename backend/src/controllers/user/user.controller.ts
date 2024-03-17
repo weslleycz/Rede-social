@@ -61,7 +61,17 @@ export class UserController {
   @ApiOkResponse({ description: 'Avatar obtido com sucesso', type: Object })
   @ApiNotFoundResponse({ description: 'Usuário não encontrado' })
   async getAvatar(@Param('id') id: string, @Res() res: Response) {
-    return await this.userService.getAvatar(id, res);
+    const img = await this.userService.getAvatar(id, res);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept',
+    );
+    res.setHeader('Content-Disposition', `attachment; filename=avatar`);
+    res.setHeader('Content-Type', 'image/jpeg');
+    res.send(img);
   }
 
   @Put('/upload/:id')

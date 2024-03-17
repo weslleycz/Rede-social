@@ -1,20 +1,12 @@
-import {
-  Avatar,
-  Badge,
-  Box,
-  Grid,
-  Stack,
-  Typography,
-  IconButton,
-} from "@mui/material";
-import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+import { Avatar, Badge, Box, Grid, Stack, Typography } from "@mui/material";
 
+import { getCookie } from "cookies-next";
 import { useState } from "react";
 import { User } from "../../../types/user";
 import { AddFriend } from "../AddFriend";
-import { getCookie } from "cookies-next";
+import { api } from "@/services/api";
 
 type Props = {
   id: string;
@@ -23,23 +15,30 @@ type Props = {
 };
 
 export const UserProfile = ({ id, idUser, user }: Props) => {
-  const [imageBase64, setImageBase64] = useState("");
-  const [imageName, setImageName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleImageUpload = (e) => {
-    console.log(124453);
-
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-
     if (file) {
       const reader = new FileReader();
 
-      reader.onloadend = () => {
-        setImageBase64(reader.result);
-        setImageName(file.name);
+      reader.onloadend = async() => {
+       await handlePostSubmit(reader.result)
       };
 
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handlePostSubmit = async (img:string) => {
+    try {
+      setIsLoading(true);
+      await api.put(`/user/upload/${id}`, {
+        img,
+      });
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
     }
   };
   return (
@@ -68,7 +67,7 @@ export const UserProfile = ({ id, idUser, user }: Props) => {
                       <>
                         <label htmlFor="image-upload">
                           <PhotoCameraIcon
-                            sx={{ cursor: "pointer", color: "gray" }}
+                            sx={{ cursor: "pointer", color: "#7876ff" }}
                           />
                         </label>
                         <input
@@ -98,10 +97,14 @@ export const UserProfile = ({ id, idUser, user }: Props) => {
                     height: 110,
                     fontSize: "50px",
                     borderRadius: "50%",
-                    border: "4px solid #fff",
+                    border: "4px solid #ffffff",
                   }}
                   alt={user?.name}
-                  src={imageBase64}
+                  src={
+                    isLoading
+                      ? "https://i.pinimg.com/originals/7e/fc/2c/7efc2cb33ee4eb9d7625ca1eca702506.gif"
+                      : process.env.API_Url + "/user/avatar/" + id
+                  }
                 />
               </Badge>
 
