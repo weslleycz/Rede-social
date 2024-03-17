@@ -10,7 +10,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export const Menu = () => {
-  const capitalizeFirstLetter = (string: string) => {
+  const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
   const pathname = usePathname();
@@ -26,10 +26,9 @@ export const Menu = () => {
     <Box p={2} marginTop={3}>
       <Link href={"/feed"}>
         <Button
-          fullWidth
           variant={pathname === "/feed" ? "contained" : "text"}
           color="primary"
-          style={{ textTransform: "none" }}
+          style={{ textTransform: "none", width: "100%", height: "50px" }}
         >
           <Grid container spacing={1} alignItems="center">
             <Grid item>
@@ -43,12 +42,11 @@ export const Menu = () => {
       <Box marginTop={1} />
       <Link href={`/perfil/${getCookie("id")}`}>
         <Button
-          fullWidth
           variant={
             pathname === `/perfil/${getCookie("id")}` ? "contained" : "text"
           }
           color="primary"
-          style={{ textTransform: "none" }}
+          style={{ textTransform: "none", width: "100%", height: "50px" }}
         >
           <Grid container spacing={1} alignItems="center">
             <Grid item>
@@ -61,10 +59,9 @@ export const Menu = () => {
 
       <Box marginTop={1} />
       <Button
-        fullWidth
         variant="text"
         color="primary"
-        style={{ textTransform: "none" }}
+        style={{ textTransform: "none", width: "100%", height: "50px" }}
       >
         <Grid container spacing={1} alignItems="center">
           <Grid item>
@@ -77,10 +74,9 @@ export const Menu = () => {
       <Box marginTop={1} />
 
       <Button
-        fullWidth
         variant={"text"}
         color="primary"
-        style={{ textTransform: "none" }}
+        style={{ textTransform: "none", width: "100%", height: "50px" }}
         onClick={() => handleExit()}
       >
         <Grid container spacing={1} alignItems="center">

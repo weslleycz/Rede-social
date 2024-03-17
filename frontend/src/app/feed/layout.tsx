@@ -2,6 +2,7 @@ import { OnlineContainer } from "@/components/OnlineContainer";
 import { Box } from "@mui/material";
 import type { Metadata } from "next";
 import { Header } from "../../components/Header";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Feed",
@@ -15,12 +16,14 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <OnlineContainer>
+    <Suspense>
+    <OnlineContainer>
         <Box style={{ background: "#EBEBEB", padding: 2 }}>
           <Header />
           {children}
         </Box>
       </OnlineContainer>
+    </Suspense>
     </>
   );
 }
