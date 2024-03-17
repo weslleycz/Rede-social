@@ -34,7 +34,7 @@ export const MobileMenu = () => {
         <IconButton
           sx={{
             fontSize: "28px",
-            color: pathname === "/feed" ? "#1aff90" : "",
+            color: pathname === "/feed" ? "#7a32ff" : "",
           }}
         >
           <FeedIcon />
@@ -44,7 +44,7 @@ export const MobileMenu = () => {
         <IconButton
           sx={{
             fontSize: "28px",
-            color: pathname === `/perfil/${getCookie("id")}` ? "#1aff90" : "",
+            color: pathname === `/perfil/${getCookie("id")}` ? "#7a32ff" : "",
           }}
         >
           <PersonIcon />
@@ -53,7 +53,7 @@ export const MobileMenu = () => {
       <IconButton
         sx={{
           fontSize: "28px",
-          color: pathname === "/mensagens" ? "#1aff90" : "",
+          color: pathname === "/mensagens" ? "#7a32ff" : "",
         }}
       >
         <InsertCommentIcon />

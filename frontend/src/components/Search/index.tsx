@@ -1,7 +1,7 @@
 "use client";
 
 import SearchIcon from "@mui/icons-material/Search";
-import { IconButton, TextField } from "@mui/material";
+import { IconButton, TextField, useMediaQuery } from "@mui/material";
 
 type Props = {
   text: string;
@@ -9,6 +9,7 @@ type Props = {
 };
 
 export const Search = ({ text, setText }: Props) => {
+  const matches = useMediaQuery("(min-width:900px)");
   return (
     <>
       <TextField
@@ -24,7 +25,7 @@ export const Search = ({ text, setText }: Props) => {
           ),
         }}
         sx={{
-          width: "63%",
+          width: matches ?  "63%" : "90%",
         }}
         size="small"
         label="Buscar..."

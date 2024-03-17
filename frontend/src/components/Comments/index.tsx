@@ -1,9 +1,9 @@
+import { api } from "@/services/api";
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import { Comment } from "../Comment";
-import { api } from "@/services/api";
 import { useQuery } from "react-query";
 import { IComment } from "../../../types/comment";
+import { Comment } from "../Comment";
 
 type Props = {
   postId: string;
@@ -40,7 +40,7 @@ export const Comments = ({ postId }: Props) => {
         }}
         elevation={0}
       >
-        <Typography sx={{ fontWeight: "800" }} variant="h6" gutterBottom>
+        <Typography sx={{ fontWeight: "500" }} variant="body1" gutterBottom>
           Comentários
         </Typography>
         <form onSubmit={handleSubmit}>

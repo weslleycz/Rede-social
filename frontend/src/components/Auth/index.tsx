@@ -55,7 +55,7 @@ export const Auth = () => {
                   alignItems: "center",
                 }}
                 height={"100vh"}
-                bgcolor={"#1aff90"}
+                bgcolor={"#7a32ff"}
                 item
                 xs={6}
               >

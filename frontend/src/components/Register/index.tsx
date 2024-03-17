@@ -18,7 +18,6 @@ export const Register = ({ setIsRegister }: Props) => {
   const [errorName, setErrorName] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
   const [errorConfirmPassword, setErrorConfirmPassword] = useState("");
-  const router = useRouter();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -55,6 +54,11 @@ export const Register = ({ setIsRegister }: Props) => {
       const expirationDate = new Date();
       expirationDate.setTime(expirationDate.getTime() + 72 * 60 * 60 * 1000);
       setCookie("token", res.data.token, {
+        expires: expirationDate,
+        secure: false,
+        sameSite: "lax",
+      });
+      setCookie("id", res.data.id, {
         expires: expirationDate,
         secure: false,
         sameSite: "lax",
