@@ -1,3 +1,4 @@
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -16,6 +17,7 @@ export class OnlineCheckGateway
   constructor(
     private readonly redisService: RedisService,
     private readonly prismaService: PrismaService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async handleDisconnect(client: any) {

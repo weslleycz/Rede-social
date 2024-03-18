@@ -1,4 +1,4 @@
-import { Box, Paper, Stack } from "@mui/material";
+import { Box, Paper, Stack, useMediaQuery } from "@mui/material";
 import { UserAvatar } from "../UserAvatar";
 import styles from "./style.module.scss";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -39,6 +39,7 @@ export const Post = ({
   showComments,
 }: Props) => {
   const [liked, setLiked] = useState<string[]>([]);
+  const matches = useMediaQuery("(min-width:900px)");
   const handleLiked = async () => {
     try {
       const res = await api.get(`/post/link/${id}`);
@@ -82,18 +83,33 @@ export const Post = ({
         </Box>
         {urlImg != null ? (
           <Box className={styles["post-img"]} marginTop={2}>
-            <img
-              width={"auto"}
-              height={450}
-              src={`${process.env.API_Url}/post/img${urlImg}`}
-              style={{
-                width: "100%",
-                height: "auto",
-                maxWidth: "100%",
-                maxHeight: "450px",
-                objectFit: "cover",
-              }}
-            />
+            {matches ? (
+              <img
+                width={"auto"}
+                height={450}
+                src={`${process.env.API_Url}/post/img${urlImg}`}
+                style={{
+                  width: "auto",
+                  height: "400px",
+                  maxWidth: "100%",
+                  maxHeight: "450px",
+                  objectFit: "cover",
+                }}
+              />
+            ) : (
+              <img
+                width={"auto"}
+                height={450}
+                src={`${process.env.API_Url}/post/img${urlImg}`}
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  maxWidth: "100%",
+                  maxHeight: "450px",
+                  objectFit: "cover",
+                }}
+              />
+            )}
           </Box>
         ) : null}
         <Box display={"flex"} marginTop={2}>

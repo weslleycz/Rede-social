@@ -36,6 +36,7 @@ const Perfil = ({ params }: { params: { id: string } }) => {
               zIndex: 1,
               overflowY: "auto",
               maxHeight: "100vh",
+              "scrollbar-width": "none",
               "::-webkit-scrollbar": {
                 width: "0.4em",
                 backgroundColor: "transparent", 

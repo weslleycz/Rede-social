@@ -1,7 +1,4 @@
-"use client";
-
 import { ReactNode, useEffect, useState } from "react";
-
 import { Menu } from "@/components/Menu";
 import { Box, Grid, useMediaQuery } from "@mui/material";
 import { MobileMenu } from "../MobileMenu";
@@ -13,58 +10,59 @@ type Props = {
 export const FeedContainer = ({ children }: Props) => {
   const [isLoadingFeed, setIsLoadingFeed] = useState(true);
   const matches = useMediaQuery("(min-width:900px)");
+
   useEffect(() => {
     const loadingTimeout = setTimeout(() => {
       setIsLoadingFeed(false);
     }, 100);
     return () => clearTimeout(loadingTimeout);
   }, []);
+
   return (
     <>
       {isLoadingFeed ? null : (
         <>
           {matches ? (
-            <>
-              <Grid container>
-                <Grid item xs>
-                  <Box
-                    sx={{
-                      height: "85vh",
-                      borderRadius: 0,
-                      background: "#ffffff",
-                      display: "flex",
-                      position: "sticky",
-                      top: 0,
-                    }}
-                  >
-                    <Menu />
-                  </Box>
-                </Grid>
-
-                <Grid item xs={8}>
-                  {children}
-                </Grid>
-
-                <Grid item xs>
-                  <Box
-                    sx={{
-                      height: "85vh",
-                      borderRadius: 0,
-                      background: "#ffff",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      position: "sticky",
-                      top: 0,
-                      zIndex: 1000
-                    }}
-                  ></Box>
-                </Grid>
+            <Grid container>
+              <Grid item xs>
+                <Box
+                  sx={{
+                    height: "85vh",
+                    borderRadius: 0,
+                    background: "#ffffff",
+                    display: "flex",
+                    position: "sticky",
+                    top: 0,
+                  }}
+                >
+                  <Menu />
+                </Box>
               </Grid>
-            </>
+              
+              <Grid item xs={8}>
+                {children}
+              </Grid>
+
+              <Grid item xs>
+                <Box
+                  sx={{
+                    height: "85vh",
+                    borderRadius: 0,
+                    background: "#ffff",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    position: "sticky",
+                    top: 0,
+                    zIndex: 1000,
+                  }}
+                ></Box>
+              </Grid>
+            </Grid>
           ) : (
-            <>{children}
-            <MobileMenu />
+            <>
+              {children}
+              <MobileMenu />
             </>
           )}
         </>

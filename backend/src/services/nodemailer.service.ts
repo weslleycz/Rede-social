@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
+import * as dotenv from 'dotenv';
 
 type IEmail = {
   title: string;
@@ -10,14 +11,15 @@ type IEmail = {
 @Injectable()
 export class EmailService {
   public async send({ email, text, title }: IEmail) {
+    dotenv.config();
     try {
       const transporter = nodemailer.createTransport({
-        port: 587,
-        secure: false,
-        host: 'localhost',
+        port: process.env.EMAIL_PORT as unknown as number,
+        secure: process.env.EMAIL_SECURE as unknown as boolean,
+        host: process.env.EMAIL_HOST as unknown as string,
         auth: {
-          user: 'user@example.com',
-          pass: 'teste',
+          user: process.env.EMAIL,
+          pass: process.env.EMAIL_PASSWORD,
         },
       });
 

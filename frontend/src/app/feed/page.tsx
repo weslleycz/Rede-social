@@ -54,8 +54,10 @@ const Feed = () => {
                 zIndex: 1,
                 overflowY: "auto",
                 maxHeight: "100vh",
+                "scrollbar-width": "none",
                 "::-webkit-scrollbar": {
                   backgroundColor: "#ff00000",
+                  display: "none"
                 },
               }}
             >

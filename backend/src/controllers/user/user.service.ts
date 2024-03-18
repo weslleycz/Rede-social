@@ -6,6 +6,8 @@ import { NextcloudService } from 'src/services/nextcloud.service';
 import { Response, Request } from 'express';
 import { CreateUserDto, LoginUserDto } from './user.dto';
 import { RedisService } from 'src/services/redis.service';
+import { EmailService } from 'src/services/nodemailer.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class UserService {
@@ -15,6 +17,8 @@ export class UserService {
     private readonly jwtService: JWTService,
     private readonly nextcloudService: NextcloudService,
     private readonly redisService: RedisService,
+    private readonly emailService: EmailService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async createUser({ email, name, password }: CreateUserDto) {
@@ -140,6 +144,22 @@ export class UserService {
           friends: { connect: [{ id: friendId }] },
         },
       });
+      const user = await this.prismaService.user.findFirst({
+        where: {
+          id: friendId,
+        },
+        select: {
+          name: true,
+        },
+      });
+      await this.prismaService.notification.create({
+        data: {
+          text: `${user.name} acabou de seguir o seu perfil`,
+          matadados: JSON.stringify({ userId: friendId, name: user.name }),
+          userId,
+        },
+      });
+      this.eventEmitter.emit(`event.notification.${friendId}`, {});
     } catch (error) {
       throw new HttpException(
         'Não foi possível adicionar amigo',

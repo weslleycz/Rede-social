@@ -1,5 +1,8 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { WebSocketServer } from '@nestjs/websockets';
 import { Request } from 'express';
+import { Server } from 'socket.io';
 import { NextcloudService } from 'src/services/nextcloud.service';
 import { PrismaService } from 'src/services/prisma.service';
 import { RedisService } from 'src/services/redis.service';
@@ -10,7 +13,10 @@ export class PostService {
     private readonly prismaService: PrismaService,
     private readonly nextcloudService: NextcloudService,
     private readonly redisService: RedisService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
+
+  @WebSocketServer() server: Server;
 
   async createPost(img: string, text: string, req: Request) {
     if (img === '' && text === '') {
@@ -249,11 +255,27 @@ export class PostService {
       req.headers.token as string,
     );
     try {
-      await this.prismaService.comment.create({
+      const comment = await this.prismaService.comment.create({
         data: {
           text,
           userId,
           postId,
+        },
+        include: {
+          Post: true,
+          user: true,
+        },
+      });
+      this.eventEmitter.emit(`event.notification.${comment.Post.userId}`, {});
+      await this.prismaService.notification.create({
+        data: {
+          text: `Novo comentário na sua postagem`,
+          matadados: JSON.stringify({
+            userId: comment.userId,
+            name: comment.user.name,
+          }),
+          userId: comment.Post.userId,
+          postId: comment.Post.id,
         },
       });
     } catch (error) {

@@ -1,9 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as dotenv from 'dotenv';
 import helmet from 'helmet';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { SMTPServer } from 'smtp-server';
 import { json } from 'body-parser';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+
+dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -20,15 +25,33 @@ async function bootstrap() {
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
 
+  if (process.env.NODE_ENV === 'dev') {
+    const server = new SMTPServer({
+      disabledCommands: ['STARTTLS', 'AUTH'],
+      logger: true,
+      onData(stream, session, callback) {
+        stream.pipe(process.stdout);
+        stream.on('end', callback);
+      },
+    });
+
+    server.listen(1025);
+  }
+
   const config = new DocumentBuilder()
-    .setTitle('Cats example')
-    .setDescription('The cats API description')
+    .setTitle('API rede social')
+    .setDescription(
+      'A API Rede Social oferece uma solução simples e eficiente para gerenciar todos os aspectos da uma rede social. ',
+    )
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/doc', app, document);
 
+  const eventEmitter = app.get(EventEmitter2);
+  eventEmitter.setMaxListeners(1000);
+
   app.use(json({ limit: '500mb' }));
-  await app.listen(3001);
+  await app.listen(process.env.PORT);
 }
 bootstrap();

@@ -79,9 +79,9 @@ export const Comments = ({ postId }: Props) => {
         </form>
       </Paper>
 
-      {data?.map((comment) => (
+      {data?.map((comment,index) => (
           <>
-            <Comment {...comment} key={comment.id} />
+            <Comment {...comment} key={index} />
           </>
         ))}
     </>

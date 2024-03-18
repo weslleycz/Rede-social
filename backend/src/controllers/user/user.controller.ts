@@ -4,15 +4,11 @@ import {
   Get,
   Param,
   Post,
-  Res,
-  Req,
-  UseInterceptors,
   Put,
+  Req,
+  Res,
+  UseInterceptors,
 } from '@nestjs/common';
-import { Response, Request } from 'express';
-import { InterceptorJwt } from 'src/middlewares/roles.middleware';
-import { CreateUserDto, LoginUserDto } from './user.dto';
-import { UserService } from './user.service';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -23,6 +19,10 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
+import { Request, Response } from 'express';
+import { InterceptorJwt } from 'src/middlewares/roles.middleware';
+import { CreateUserDto, LoginUserDto } from './user.dto';
+import { UserService } from './user.service';
 
 @Controller('user')
 @ApiTags('user')

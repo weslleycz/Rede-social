@@ -8,7 +8,7 @@ type Props = {
 export const UserAvatar = ({ id, name }: Props) => {
   return (
     <>
-      <Avatar alt={name} src={process.env.API_Url + "/user/avatar/" + id} />
+      <Avatar src={process.env.API_Url + "/user/avatar/" + id} />
     </>
   );
 };

@@ -5,7 +5,8 @@ import styles from "./style.module.scss";
 import { theme } from "@/theme";
 import { Box } from "@mui/material";
 import { ReactNode } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider, } from "react-query";
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 type Props = {
   children: ReactNode;
@@ -21,6 +22,7 @@ export const Container = ({ children }: Props) => {
           {children}
         </Box>
       </ThemeProvider>
+      <ReactQueryDevtools />
       </QueryClientProvider>
     </>
   );

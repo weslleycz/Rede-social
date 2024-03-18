@@ -14,31 +14,33 @@ datasource db {
 }
 
 model User {
-  id       String     @id @default(uuid())
-  email    String     @unique
-  name     String
-  password String
-  friends  User[]     @relation("UserFriends")
-  friendOf User[]     @relation("UserFriends")
-  Chat     Chat?      @relation(fields: [chatId], references: [id])
-  chatId   String?
-  Comment  Comment[]
-  Post     Post[]
-  status   UserStatus @default(Online)
+  id           String         @id @default(uuid())
+  email        String         @unique
+  name         String
+  password     String
+  friends      User[]         @relation("UserFriends")
+  friendOf     User[]         @relation("UserFriends")
+  Chat         Chat?          @relation(fields: [chatId], references: [id])
+  chatId       String?
+  Comment      Comment[]
+  Post         Post[]
+  status       UserStatus     @default(Online)
+  Notification Notification[]
 
   @@map("Users")
   @@schema("base")
 }
 
 model Post {
-  id         String    @id @default(uuid())
-  content    String?
-  urlImg     String?
-  links      String[]
-  comments   Comment[]
-  user       User      @relation(fields: [userId], references: [id])
-  userId     String
-  createDate String
+  id           String         @id @default(uuid())
+  content      String?
+  urlImg       String?
+  links        String[]
+  comments     Comment[]
+  user         User           @relation(fields: [userId], references: [id])
+  userId       String
+  createDate   String
+  Notification Notification[]
 
   @@map("Posts")
   @@schema("base")
@@ -74,6 +76,20 @@ model Comment {
   userId String
 
   @@map("Comments")
+  @@schema("base")
+}
+
+model Notification {
+  id        String  @id @default(uuid())
+  text      String
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
+  post      Post?   @relation(fields: [postId], references: [id])
+  postId    String?
+  read      Boolean @default(false)
+  matadados Json
+
+  @@map("Notifications")
   @@schema("base")
 }
 

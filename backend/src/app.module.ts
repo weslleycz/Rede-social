@@ -16,10 +16,19 @@ import { RedisService } from './services/redis.service';
 import { FeedGateway } from './websockets/feed/feed.gateway';
 import { UserService } from './controllers/user/user.service';
 import { OnlineCheckGateway } from './websockets/online-check/online-check.gateway';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { NotificationsGateway } from './websockets/notifications/notifications.gateway';
+import { NotificationsController } from './controllers/notifications/notifications.controller';
+import { NotificationsService } from './controllers/notifications/notifications.service';
 
 @Module({
-  imports: [],
-  controllers: [AppController, UserController, PostController],
+  imports: [EventEmitterModule.forRoot()],
+  controllers: [
+    AppController,
+    UserController,
+    PostController,
+    NotificationsController,
+  ],
   providers: [
     { provide: 'String', useValue: '' },
     AppService,
@@ -32,12 +41,14 @@ import { OnlineCheckGateway } from './websockets/online-check/online-check.gatew
     InterceptorJwt,
     PostService,
     UserService,
+    NotificationsService,
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
     },
     FeedGateway,
     OnlineCheckGateway,
+    NotificationsGateway,
   ],
 })
 export class AppModule {}

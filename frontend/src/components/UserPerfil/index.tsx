@@ -22,15 +22,15 @@ export const UserProfile = ({ id, idUser, user }: Props) => {
     if (file) {
       const reader = new FileReader();
 
-      reader.onloadend = async() => {
-       await handlePostSubmit(reader.result)
+      reader.onloadend = async () => {
+        await handlePostSubmit(reader.result);
       };
 
       reader.readAsDataURL(file);
     }
   };
 
-  const handlePostSubmit = async (img:string) => {
+  const handlePostSubmit = async (img: string) => {
     try {
       setIsLoading(true);
       await api.put(`/user/upload/${id}`, {
@@ -99,7 +99,6 @@ export const UserProfile = ({ id, idUser, user }: Props) => {
                     borderRadius: "50%",
                     border: "4px solid #ffffff",
                   }}
-                  alt={user?.name}
                   src={
                     isLoading
                       ? "https://i.pinimg.com/originals/7e/fc/2c/7efc2cb33ee4eb9d7625ca1eca702506.gif"
