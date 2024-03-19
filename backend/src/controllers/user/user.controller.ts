@@ -138,4 +138,21 @@ export class UserController {
   async cancelFriend(@Param('id') id: string, @Req() req: Request) {
     return await this.userService.cancelFriend(id, req);
   }
+
+  @Get('/listFriends/:id')
+  @ApiOperation({
+    summary: 'Listar amigos de usuário',
+    description: 'Endpoint para listar todos os amigos de um usuário.',
+  })
+  @ApiBearerAuth()
+  @ApiParam({ name: 'id', description: 'ID do usuário' })
+  @UseInterceptors(InterceptorJwt)
+  @ApiOkResponse({
+    description: 'Amigos listados com sucesso',
+    type: [Object],
+  })
+  @ApiNotFoundResponse({ description: 'Usuário não encontrado' })
+  async listFriends(@Param('id') id: string) {
+    return await this.userService.listFriends(id);
+  }
 }

@@ -8,6 +8,7 @@ import { socket } from "@/services/socket";
 import { Box, Container, Skeleton, useMediaQuery } from "@mui/material";
 import { getCookie } from "cookies-next";
 import { useEffect } from "react";
+import { ChatItem } from "react-chat-elements";
 import { useQuery } from "react-query";
 
 const Feed = () => {

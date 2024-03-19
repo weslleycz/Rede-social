@@ -186,4 +186,35 @@ export class UserService {
       );
     }
   }
+
+  async listFriends(userId: string) {
+    try {
+      const user = await this.prismaService.user.findUnique({
+        where: {
+          id: userId,
+        },
+        include: {
+          friends: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              status: true,
+            },
+          },
+        },
+      });
+
+      if (!user) {
+        throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
+      }
+
+      return user.friends;
+    } catch (error) {
+      throw new HttpException(
+        'Erro ao listar amigos',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }

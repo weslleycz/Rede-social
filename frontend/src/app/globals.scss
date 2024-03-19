@@ -156,3 +156,8 @@
     color: inherit;
     text-decoration: none;
   }
+
+  ::selection {
+    background-color: #5b21c580;
+    color: #ffffff;
+}

@@ -1,1 +1,25 @@
-.post-title{color:#505050;font-weight:700}.post-data{color:#a1a1a1;font-size:small}.post-text{font-size:small;margin-top:2%}.post-img{padding:1%;justify-content:start;display:flex}.footer-text{color:#a1a1a1;font-size:small}
+.post-title {
+  color: #505050;
+  font-weight: 700;
+}
+
+.post-data {
+  color: #a1a1a1;
+  font-size: small;
+}
+
+.post-text {
+  font-size: small;
+  margin-top: 2%;
+}
+
+.post-img {
+  padding: 1%;
+  justify-content: start;
+  display: flex;
+}
+
+.footer-text {
+  color: #a1a1a1;
+  font-size: small;
+}/*# sourceMappingURL=style.module.css.map */

@@ -2,6 +2,7 @@ import { Container } from "@/components/Container";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import type { Metadata } from "next";
 import "./globals.scss";
+import 'react-chat-elements/dist/main.css'
 
 export const metadata: Metadata = {
   title: "Entrar",

@@ -26,7 +26,7 @@ export const Menu = () => {
     <Box p={2} marginTop={3}>
       <Link href={"/feed"}>
         <Button
-          variant={pathname === "/feed" ? "contained" : "text"}
+          // variant={pathname === "/feed" ? "contained" : "text"}
           color="primary"
           style={{ textTransform: "none", width: "100%", height: "50px" }}
         >
@@ -42,9 +42,7 @@ export const Menu = () => {
       <Box marginTop={1} />
       <Link href={`/perfil/${getCookie("id")}`}>
         <Button
-          variant={
-            pathname === `/perfil/${getCookie("id")}` ? "contained" : "text"
-          }
+
           color="primary"
           style={{ textTransform: "none", width: "100%", height: "50px" }}
         >
@@ -58,23 +56,8 @@ export const Menu = () => {
       </Link>
 
       <Box marginTop={1} />
-      <Button
-        variant="text"
-        color="primary"
-        style={{ textTransform: "none", width: "100%", height: "50px" }}
-      >
-        <Grid container spacing={1} alignItems="center">
-          <Grid item>
-            <InsertCommentIcon />
-          </Grid>
-          <Grid item>{capitalizeFirstLetter("Mensagens")}</Grid>
-        </Grid>
-      </Button>
-
-      <Box marginTop={1} />
 
       <Button
-        variant={"text"}
         color="primary"
         style={{ textTransform: "none", width: "100%", height: "50px" }}
         onClick={() => handleExit()}
